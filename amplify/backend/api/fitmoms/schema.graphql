@@ -1,0 +1,32 @@
+type Mom @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  openBills: Boolean!
+  courses: [Course] @manyToMany(relationName: "Registration")
+  attendances: [Attendance] @hasMany(indexName: "byMom", fields: ["id"])
+}
+
+type Course @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  name: String!
+  icon: String
+  moms: [Mom] @manyToMany(relationName: "Registration")
+  sessions: [Session] @hasMany(indexName: "byCourse", fields: ["id"])
+}
+
+type Session @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  dateTime: String!
+  courseID: ID! @index(name: "byCourse", sortKeyFields: ["dateTime"])
+  course: Course @belongsTo(fields: ["courseID"])
+  attendances: [Attendance] @hasMany(indexName: "bySession", fields: ["id"])
+}
+
+type Attendance @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  momID: ID! @index(name: "byMom", sortKeyFields: ["sessionID"])
+  sessionID: ID! @index(name: "bySession", sortKeyFields: ["momID"])
+  mom: Mom @belongsTo(fields: ["momID"])
+  session: Session @belongsTo(fields: ["sessionID"])
+}

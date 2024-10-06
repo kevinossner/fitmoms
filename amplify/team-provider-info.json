@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fitmoms-dev-eb66c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::905418166779:role/amplify-fitmoms-dev-eb66c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::905418166779:role/amplify-fitmoms-dev-eb66c-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-fitmoms-dev-eb66c-deployment",
+      "UnauthRoleName": "amplify-fitmoms-dev-eb66c-unauthRole",
+      "StackName": "amplify-fitmoms-dev-eb66c",
+      "StackId": "arn:aws:cloudformation:eu-central-1:905418166779:stack/amplify-fitmoms-dev-eb66c/30878a30-83f5-11ef-9283-02fc09cc0019",
+      "AmplifyAppId": "d3o2fru1a5rstz"
+    },
+    "categories": {
+      "auth": {
+        "fitmoms052f0013": {}
+      },
+      "api": {
+        "fitmoms": {}
+      }
+    }
+  }
+}

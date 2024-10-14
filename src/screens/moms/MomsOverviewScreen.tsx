@@ -3,11 +3,10 @@ import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import MomCard from "../components/MomCard";
-import { CustomMom } from "../types/MomType";
-import { Mom } from "../API";
-import { Course } from "../API";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import MomCard from "../../components/MomCard";
+import { CustomMom } from "../../types/MomType";
+import { Mom, Course } from "../../API";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import { generateClient } from "aws-amplify/api";
 import {
   listMoms,
@@ -15,7 +14,7 @@ import {
   listCourses,
   getCourse,
   attendancesByMomIDAndSessionID,
-} from "../graphql/queries";
+} from "../../graphql/queries";
 
 const client = generateClient();
 

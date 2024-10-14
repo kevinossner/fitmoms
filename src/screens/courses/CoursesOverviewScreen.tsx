@@ -3,17 +3,17 @@ import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/RootStackParamListType";
-import { CourseFull } from "../types/CourseType";
-import { Course, Mom } from "../API";
-import CourseCard from "../components/CourseCard";
+import { RootStackParamList } from "../../types/RootStackParamListType";
+import { CourseFull } from "../../types/CourseType";
+import { Course, Mom } from "../../API";
+import CourseCard from "../../components/CourseCard";
 import { generateClient } from "aws-amplify/api";
 import {
   listCourses,
   registrationsByCourseId,
   getMom,
   listMoms,
-} from "../graphql/queries";
+} from "../../graphql/queries";
 
 const client = generateClient();
 

@@ -2,18 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { generateClient } from "aws-amplify/api";
-import {
-  createMom,
-  createRegistration,
-  createSession,
-} from "../graphql/mutations";
-import SessionEditCreateCard from "../components/SessionEditCreateCard";
-import { Course } from "../API";
-import { CustomMom } from "../types/MomType";
-import { CourseFull } from "../types/CourseType";
+import { createSession } from "../../graphql/mutations";
+import SessionEditCreateCard from "../../components/SessionEditCreateCard";
+import { CourseFull } from "../../types/CourseType";
 
 type SessionAddScreenRouteProp = RouteProp<RootStackParamList, "SessionAdd">;
 const client = generateClient();

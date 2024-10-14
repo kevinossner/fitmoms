@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import CourseDetailsCard from "../components/CourseDetailsCard";
-import CourseEditCreateCard from "../components/CourseEditCreateCard";
+import CourseDetailsCard from "../../components/CourseDetailsCard";
+import CourseEditCreateCard from "../../components/CourseEditCreateCard";
 import { Button, Menu, PaperProvider } from "react-native-paper";
 import { generateClient } from "aws-amplify/api";
 import {
@@ -13,10 +13,10 @@ import {
   updateCourse,
   deleteRegistration,
   createRegistration,
-} from "../graphql/mutations";
-import { registrationsByCourseId } from "../graphql/queries";
-import { CourseFull } from "../types/CourseType";
-import { Mom } from "../API";
+} from "../../graphql/mutations";
+import { registrationsByCourseId } from "../../graphql/queries";
+import { CourseFull } from "../../types/CourseType";
+import { Mom } from "../../API";
 
 type CourseDetailsScreenRouteProp = RouteProp<
   RootStackParamList,

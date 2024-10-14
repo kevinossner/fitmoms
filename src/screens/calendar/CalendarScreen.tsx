@@ -4,20 +4,20 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { CalendarList, DateData, LocaleConfig } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { generateClient } from "aws-amplify/api";
-import { Session, Course, Mom } from "../API";
-import { CourseFull } from "../types/CourseType";
-import { CustomSession } from "../types/SessionType";
+import { Session, Course, Mom } from "../../API";
+import { CourseFull } from "../../types/CourseType";
+import { CustomSession } from "../../types/SessionType";
 import {
   listSessions,
   listCourses,
   registrationsByCourseId,
   getMom,
-} from "../graphql/queries";
-import { createSession } from "../graphql/mutations";
+} from "../../graphql/queries";
+import { createSession } from "../../graphql/mutations";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import SessionCard from "../components/SessionCard";
+import SessionCard from "../../components/SessionCard";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 
 const client = generateClient();
 LocaleConfig.locales["de"] = {

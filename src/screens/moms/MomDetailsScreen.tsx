@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MomDetailsCard from "../components/MomDetailsCard";
-import MomEditCreateCard from "../components/MomEditCreateCard";
+import MomDetailsCard from "../../components/MomDetailsCard";
+import MomEditCreateCard from "../../components/MomEditCreateCard";
 import { Button, Menu, PaperProvider } from "react-native-paper";
 import { generateClient } from "aws-amplify/api";
 import {
   attendancesByMomIDAndSessionID,
-  listAttendances,
   registrationsByMomId,
-} from "../graphql/queries";
+} from "../../graphql/queries";
 import {
   deleteMom,
   updateMom,
@@ -20,9 +19,9 @@ import {
   createRegistration,
   createAttendance,
   deleteAttendance,
-} from "../graphql/mutations";
-import { CustomMom } from "../types/MomType";
-import { Course } from "../API";
+} from "../../graphql/mutations";
+import { CustomMom } from "../../types/MomType";
+import { Course } from "../../API";
 
 type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "MomDetails">;
 const client = generateClient();

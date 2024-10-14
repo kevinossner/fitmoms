@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,10 +7,8 @@ import {
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import CourseDetailsCard from "../components/CourseDetailsCard";
-import CourseEditCreateCard from "../components/CourseEditCreateCard";
 import { Button, Menu, PaperProvider } from "react-native-paper";
 import { generateClient } from "aws-amplify/api";
 import {
@@ -18,19 +16,13 @@ import {
   deleteAttendance,
   updateSession,
   createAttendance,
-} from "../graphql/mutations";
-import {
-  attendancesBySessionIDAndMomID,
-  getMom,
-  registrationsByCourseId,
-  listAttendances,
-  attendancesByMomIDAndSessionID,
-} from "../graphql/queries";
-import { CourseFull } from "../types/CourseType";
-import { Mom, Session } from "../API";
-import DetailsCard from "../components/DetailsCard";
-import { CustomSession } from "../types/SessionType";
-import SessionEditCreateCard from "../components/SessionEditCreateCard";
+} from "../../graphql/mutations";
+import { attendancesBySessionIDAndMomID } from "../../graphql/queries";
+import { CourseFull } from "../../types/CourseType";
+import { Mom, Session } from "../../API";
+import DetailsCard from "../../components/DetailsCard";
+import { CustomSession } from "../../types/SessionType";
+import SessionEditCreateCard from "../../components/SessionEditCreateCard";
 
 type SessionDetailsScreenRouteProp = RouteProp<
   RootStackParamList,

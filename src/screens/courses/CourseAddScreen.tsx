@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStackParamListType";
+import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { generateClient } from "aws-amplify/api";
-import { createCourse, createRegistration } from "../graphql/mutations";
-import CourseEditCreateCard from "../components/CourseEditCreateCard";
-import { CourseFull } from "../types/CourseType";
-import { Mom } from "../API";
+import { createCourse, createRegistration } from "../../graphql/mutations";
+import CourseEditCreateCard from "../../components/CourseEditCreateCard";
+import { CourseFull } from "../../types/CourseType";
+import { Mom } from "../../API";
 
 type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "CourseAdd">;
 const client = generateClient();

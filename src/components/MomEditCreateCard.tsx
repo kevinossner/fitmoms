@@ -104,7 +104,9 @@ const MomEditCreateCard = ({
           >
             <Ionicons name="remove-circle-outline" size={28} color="#720039" />
           </TouchableOpacity>
-          <Text style={styles.inputForm}>{formState.attendanceCount}</Text>
+          <Text style={styles.attendanceValue}>
+            {formState.attendanceCount}
+          </Text>
           <TouchableOpacity
             onPress={() =>
               setInput("attendanceCount", formState.attendanceCount + 1)
@@ -169,15 +171,21 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: "#333333",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
     paddingBottom: 4,
   },
   inputForm: {
     color: "#999999",
-    fontSize: 18,
+    fontSize: 16,
   },
   attendanceForm: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  attendanceValue: {
+    fontSize: 24,
+    color: "#333333",
+    paddingStart: 10,
+    paddingEnd: 10,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/RootStackParamListType";
@@ -132,7 +132,6 @@ const MomDetailsScreen = () => {
           });
         }
       }
-      console.log(attendanceDiff);
       if (attendanceDiff < 0) {
         const attendanceQuery = await client.graphql({
           query: attendancesByMomIDAndSessionID,
@@ -176,6 +175,20 @@ const MomDetailsScreen = () => {
     } catch (err) {
       console.log("error update mom:", err);
     }
+  }
+
+  function openConfirmation() {
+    Alert.alert(
+      "Bist du sicher?",
+      "Teilnehmerin wird unwiderruflich gelöscht",
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+        },
+        { text: "Bestätigen", onPress: () => destroyMom() },
+      ]
+    );
   }
 
   async function destroyMom() {
@@ -244,7 +257,7 @@ const MomDetailsScreen = () => {
                 onPress={onEdit}
               />
               <Menu.Item
-                onPress={destroyMom}
+                onPress={openConfirmation}
                 title="Löschen"
                 leadingIcon="trash-can-outline"
               />

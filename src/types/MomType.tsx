@@ -7,6 +7,7 @@ export type Mom = {
   createdAt?: string;
   updatedAt?: string;
   openBills: boolean;
+  notes?: string;
 };
 
 export type CustomMom = Mom & {

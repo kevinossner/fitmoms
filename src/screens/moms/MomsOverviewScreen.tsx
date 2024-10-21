@@ -62,6 +62,7 @@ const MomsOverviewScreen = () => {
               createdAt: mom.createdAt,
               updatedAt: mom.updatedAt,
               openBills: mom.openBills,
+              notes: mom.notes,
               registratedCourses: registratedCourses,
               attendanceCount: attendancesCount,
             } as CustomMom;
@@ -73,6 +74,7 @@ const MomsOverviewScreen = () => {
             createdAt: mom.createdAt,
             updatedAt: mom.updatedAt,
             openBills: mom.openBills,
+            notes: mom.notes,
             registratedCourses: [],
             attendanceCount: 0,
           } as CustomMom;

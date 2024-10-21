@@ -17,6 +17,7 @@ export const createMom = /* GraphQL */ `mutation CreateMom(
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -43,6 +44,7 @@ export const updateMom = /* GraphQL */ `mutation UpdateMom(
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -69,6 +71,7 @@ export const deleteMom = /* GraphQL */ `mutation DeleteMom(
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -261,6 +264,7 @@ export const createAttendance = /* GraphQL */ `mutation CreateAttendance(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -295,6 +299,7 @@ export const updateAttendance = /* GraphQL */ `mutation UpdateAttendance(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -329,6 +334,7 @@ export const deleteAttendance = /* GraphQL */ `mutation DeleteAttendance(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -363,6 +369,7 @@ export const createRegistration = /* GraphQL */ `mutation CreateRegistration(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -397,6 +404,7 @@ export const updateRegistration = /* GraphQL */ `mutation UpdateRegistration(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -431,6 +439,7 @@ export const deleteRegistration = /* GraphQL */ `mutation DeleteRegistration(
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename

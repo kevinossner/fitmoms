@@ -156,6 +156,7 @@ const App = () => {
   );
 };
 export default withAuthenticator(App);
+// export default App;
 
 const styles = StyleSheet.create({
   topSafeArea: {

@@ -14,6 +14,7 @@ export const getMom = /* GraphQL */ `query GetMom($id: ID!) {
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -35,6 +36,7 @@ export const listMoms = /* GraphQL */ `query ListMoms($filter: ModelMomFilterInp
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -143,6 +145,7 @@ export const getAttendance = /* GraphQL */ `query GetAttendance($id: ID!) {
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -196,6 +199,7 @@ export const getRegistration = /* GraphQL */ `query GetRegistration($id: ID!) {
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename

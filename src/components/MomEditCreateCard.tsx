@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Switch, TextInput } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Switch,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { CustomMom } from "../types/MomType";
 import { Course } from "../API";
 import MultiSelect from "react-native-multiple-select";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const initialMom: CustomMom = {
   firstName: "",
@@ -33,6 +41,8 @@ const MomEditCreateCard = ({
       : initialMom
   );
 
+  const [attendances, setAttendances] = useState(0);
+
   useEffect(() => {
     onChange(formState);
   }, [formState, onChange]);
@@ -50,59 +60,83 @@ const MomEditCreateCard = ({
 
   return (
     <View style={styles.card}>
-      <TextInput
-        style={styles.input}
-        onChangeText={(value) => setInput("firstName", value)}
-        value={formState.firstName}
-        placeholder="Vorname"
-        selectionColor={"#720039"}
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(value) => setInput("lastName", value)}
-        value={formState.lastName}
-        placeholder="Nachname"
-        selectionColor={"#720039"}
-      />
-      <Text>Offene Rechnungen:</Text>
-      <Switch
-        ios_backgroundColor="#3e3e3e"
-        trackColor={{ false: "green", true: "#720039" }}
-        onValueChange={(value) => setInput("openBills", value)}
-        value={formState.openBills}
-      />
-      <MultiSelect
-        items={courses}
-        uniqueKey="id"
-        onSelectedItemsChange={handleCourseSelect}
-        selectedItems={formState.registratedCourses.map((course) => course.id)}
-        selectText="Kurse wählen..."
-        searchInputPlaceholderText="Kurse suchen..."
-        tagRemoveIconColor="#720039"
-        tagBorderColor="#72003999"
-        tagTextColor="#72003999"
-        selectedItemTextColor="#72003999"
-        selectedItemIconColor="#72003999"
-        itemTextColor="#ccc"
-        displayKey="name"
-        searchInputStyle={{ color: "#ccc" }}
-        hideSubmitButton={true}
-      />
-      <TextInput
-        style={styles.input}
-        value={formState.attendanceCount.toString()}
-        placeholder="Anwesenheitsanzahl"
-        keyboardType="numeric"
-        onChangeText={(value) => {
-          // Convert the value to a number
-          const numericValue = parseInt(value, 10);
-          if (!isNaN(numericValue)) {
-            setInput("attendanceCount", numericValue);
-          } else {
-            setInput("attendanceCount", 0); // Or handle it in some other appropriate way
-          }
-        }}
-      />
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Vorname</Text>
+        <TextInput
+          style={styles.inputForm}
+          onChangeText={(value) => setInput("firstName", value)}
+          value={formState.firstName}
+          placeholder="Vorname"
+          selectionColor={"#720039"}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Nachname</Text>
+        <TextInput
+          style={styles.inputForm}
+          onChangeText={(value) => setInput("lastName", value)}
+          value={formState.lastName}
+          placeholder="Nachname"
+          selectionColor={"#720039"}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Offene Rechnungen</Text>
+        <Switch
+          ios_backgroundColor="#3e3e3e"
+          trackColor={{ false: "green", true: "#720039" }}
+          onValueChange={(value) => setInput("openBills", value)}
+          value={formState.openBills}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Teilnahmen</Text>
+        <View style={styles.attendanceForm}>
+          <TouchableOpacity
+            onPress={() => {
+              const newCounter = formState.attendanceCount - 1;
+              if (newCounter >= 0) {
+                setInput("attendanceCount", newCounter);
+              } else {
+                setInput("attendanceCount", 0);
+              }
+            }}
+          >
+            <Ionicons name="remove-circle-outline" size={28} color="#720039" />
+          </TouchableOpacity>
+          <Text style={styles.attendanceValue}>
+            {formState.attendanceCount}
+          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              setInput("attendanceCount", formState.attendanceCount + 1)
+            }
+          >
+            <Ionicons name="add-circle-outline" size={28} color="#720039" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.inputContainer}>
+        <MultiSelect
+          items={courses}
+          uniqueKey="id"
+          onSelectedItemsChange={handleCourseSelect}
+          selectedItems={formState.registratedCourses.map(
+            (course) => course.id
+          )}
+          selectText="Kurse wählen..."
+          searchInputPlaceholderText="Kurse suchen..."
+          tagRemoveIconColor="#720039"
+          tagBorderColor="#72003999"
+          tagTextColor="#72003999"
+          selectedItemTextColor="#72003999"
+          selectedItemIconColor="#72003999"
+          itemTextColor="#ccc"
+          displayKey="name"
+          searchInputStyle={{ color: "#ccc" }}
+          hideSubmitButton={true}
+        />
+      </View>
     </View>
   );
 };
@@ -131,8 +165,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 12,
   },
-  input: {
-    marginBottom: 10,
-    fontSize: 22,
+  inputContainer: {
+    marginBottom: 24,
+  },
+  inputLabel: {
+    color: "#333333",
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingBottom: 6,
+  },
+  inputForm: {
+    color: "#999999",
+    fontSize: 16,
+  },
+  attendanceForm: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  attendanceValue: {
+    fontSize: 24,
+    color: "#333333",
+    paddingStart: 10,
+    paddingEnd: 10,
   },
 });

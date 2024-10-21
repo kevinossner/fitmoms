@@ -89,26 +89,34 @@ const DetailsCard = ({
           {data.session.courseInfo.name}
         </Text>
       </View>
-      <View style={styles.cardContent}>
-        <Text>Uhrzeit: {datetimeToDate(data.session.dateTime)}</Text>
-        <FlatList
-          data={data.session.courseInfo.registratedMoms}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item: mom, index }) => (
-            <View style={styles.listItem}>
-              <Text>
-                {mom.firstName} {mom.lastName}
-              </Text>
-              <Checkbox
-                color="#720039"
-                value={attendanceChecks[index]}
-                onValueChange={(newValue) =>
-                  handleCheckboxChange(index, newValue)
-                }
-              />
-            </View>
-          )}
-        />
+      <View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Uhrzeit</Text>
+          <Text style={styles.value}>
+            {datetimeToDate(data.session.dateTime)}
+          </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Mamas</Text>
+          <FlatList
+            data={data.session.courseInfo.registratedMoms}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item: mom, index }) => (
+              <View style={styles.listItem}>
+                <Text style={styles.value}>
+                  {mom.firstName} {mom.lastName}
+                </Text>
+                <Checkbox
+                  color="#720039"
+                  value={attendanceChecks[index]}
+                  onValueChange={(newValue) =>
+                    handleCheckboxChange(index, newValue)
+                  }
+                />
+              </View>
+            )}
+          />
+        </View>
       </View>
     </View>
   );
@@ -137,15 +145,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 12,
+    color: "#333333",
   },
   cardHeaderIcon: {
     marginLeft: 10, // Optional: Add space between the name and ico
   },
-  cardContent: {},
+  infoRow: {
+    marginBottom: 18,
+  },
+  label: {
+    color: "#666666",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  value: {
+    color: "#333333",
+    fontSize: 18,
+  },
   listItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 8,
+    marginVertical: 4,
     justifyContent: "space-between",
     marginRight: 24,
   },

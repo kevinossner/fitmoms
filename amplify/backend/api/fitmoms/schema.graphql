@@ -3,6 +3,7 @@ type Mom @model @auth(rules: [{ allow: private }]) {
   firstName: String!
   lastName: String!
   openBills: Boolean!
+  notes: String
   courses: [Course] @manyToMany(relationName: "Registration")
   attendances: [Attendance] @hasMany(indexName: "byMom", fields: ["id"])
 }

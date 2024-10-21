@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput, Text } from "react-native";
 import { CourseFull } from "../types/CourseType";
 import { Mom } from "../API";
 import MultiSelect from "react-native-multiple-select";
@@ -46,13 +46,16 @@ const CourseEditCreateCard = ({
 
   return (
     <View style={styles.card}>
-      <TextInput
-        style={styles.input}
-        onChangeText={(value) => setInput("name", value)}
-        value={formState.name}
-        placeholder="Name"
-        selectionColor={"#720039"}
-      />
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Kurs-Name</Text>
+        <TextInput
+          style={styles.inputForm}
+          onChangeText={(value) => setInput("name", value)}
+          value={formState.name}
+          placeholder="Name"
+          selectionColor={"#720039"}
+        />
+      </View>
       <MultiSelect
         items={preparedMoms}
         uniqueKey="id"
@@ -101,5 +104,18 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
     fontSize: 22,
+  },
+  inputContainer: {
+    marginBottom: 24,
+  },
+  inputLabel: {
+    color: "#333333",
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingBottom: 4,
+  },
+  inputForm: {
+    color: "#999999",
+    fontSize: 16,
   },
 });

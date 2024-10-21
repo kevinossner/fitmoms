@@ -5,7 +5,11 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { generateClient } from "aws-amplify/api";
-import { createMom, createRegistration } from "../../graphql/mutations";
+import {
+  createMom,
+  createRegistration,
+  createAttendance,
+} from "../../graphql/mutations";
 import MomEditCreateCard from "../../components/MomEditCreateCard";
 import { Course } from "../../API";
 import { CustomMom } from "../../types/MomType";
@@ -34,7 +38,8 @@ const MomAddScreen = () => {
         prevMom.firstName === updatedMom.firstName &&
         prevMom.lastName === updatedMom.lastName &&
         prevMom.openBills === updatedMom.openBills &&
-        prevMom.registratedCourses === updatedMom.registratedCourses
+        prevMom.registratedCourses === updatedMom.registratedCourses &&
+        prevMom.attendanceCount === updatedMom.attendanceCount
       ) {
         return prevMom;
       }
@@ -45,7 +50,7 @@ const MomAddScreen = () => {
         lastName: updatedMom.lastName,
         openBills: updatedMom.openBills,
         registratedCourses: updatedMom.registratedCourses,
-        attendanceCount: 0,
+        attendanceCount: updatedMom.attendanceCount,
       };
     });
   }
@@ -80,6 +85,20 @@ const MomAddScreen = () => {
           });
         })
       );
+
+      if (mom.attendanceCount > 0) {
+        for (let i = 0; i < mom.attendanceCount; i++) {
+          await client.graphql({
+            query: createAttendance,
+            variables: {
+              input: {
+                momID: newMomId,
+                sessionID: "dummySession",
+              },
+            },
+          });
+        }
+      }
 
       navigation.goBack();
     } catch (err) {

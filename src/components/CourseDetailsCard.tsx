@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 12,
+    color: "#333333",
   },
   icon: {
     marginLeft: 10, // Optional: Add space between the name and ico

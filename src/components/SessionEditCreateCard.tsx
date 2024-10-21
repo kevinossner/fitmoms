@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   cardHeaderText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#333333",
   },
   inputContainer: {
     marginBottom: 24,

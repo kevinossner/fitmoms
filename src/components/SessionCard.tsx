@@ -36,8 +36,12 @@ const SessionCard = ({ session }: { session: CustomSession }) => {
         <Text style={styles.cardTitle}>{session.courseInfo.name}</Text>
       </View>
       <View>
-        <Text>Uhrzeit: {datetimeToTime(session.dateTime)}</Text>
-        <Text>Mamas: {session.courseInfo.registratedMoms.length}</Text>
+        <Text style={styles.info}>
+          Uhrzeit: {datetimeToTime(session.dateTime)}
+        </Text>
+        <Text style={styles.info}>
+          Mamas: {session.courseInfo.registratedMoms.length}
+        </Text>
       </View>
     </View>
   );
@@ -61,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#333333",
   },
   row: {
     flexDirection: "row", // Align items in a row
@@ -69,5 +74,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5, // Optional: Add space between the name and ico
+  },
+  info: {
+    color: "#333333",
   },
 });

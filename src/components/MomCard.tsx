@@ -42,7 +42,7 @@ const MomCard = ({ mom }: { mom: CustomMom }) => {
           );
         })}
       </View>
-      <Text>Teilnahmen: {mom.attendanceCount}</Text>
+      <Text style={styles.info}>Teilnahmen: {mom.attendanceCount}</Text>
     </View>
   );
 };
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#333333",
   },
   row: {
     flexDirection: "row",
@@ -73,5 +74,8 @@ const styles = StyleSheet.create({
   },
   billsIcon: {
     marginLeft: 10,
+  },
+  info: {
+    color: "#333333",
   },
 });

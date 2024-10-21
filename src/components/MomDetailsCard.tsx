@@ -20,6 +20,7 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
 
   async function updateNotes(newNotes: string): Promise<void> {
     setNotes(newNotes);
+    mom.notes = newNotes;
     await client.graphql({
       query: updateMom,
       variables: {
@@ -47,14 +48,14 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
           />
         )}
       </View>
-      <View style={styles.row}>
+      <View style={styles.courseRow}>
         {mom.registratedCourses.map((course, index) => {
           if (course.icon && course.icon in MaterialIcons.glyphMap) {
             return (
               <MaterialIcons
                 key={index}
                 name={course.icon as keyof typeof MaterialIcons.glyphMap}
-                size={22}
+                size={32}
                 color="#666666"
               />
             );
@@ -63,22 +64,27 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
             <MaterialIcons
               key={index}
               name="question-mark"
-              size={22}
+              size={32}
               color="#666666"
             />
           );
         })}
       </View>
-      <Text>Mitglied seit: {formatToEuropeanDate(mom.createdAt!)}</Text>
-      <Text>Teilnahmen: {mom.attendanceCount}</Text>
-      <View>
-        <Text>Notiz</Text>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Mitglied seit</Text>
+        <Text style={styles.value}>{formatToEuropeanDate(mom.createdAt!)}</Text>
+      </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Teilnahmen</Text>
+        <Text style={styles.value}>{mom.attendanceCount}</Text>
+      </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Notiz</Text>
         <View style={styles.notesFormContainer}>
           <TextInput
             style={styles.notesForm}
             selectionColor="#720039"
             multiline={true}
-            numberOfLines={5}
             onChangeText={(value) => updateNotes(value)}
             value={notes}
           />
@@ -111,14 +117,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 12,
+    color: "#333333",
   },
-  row: {
+  courseRow: {
     flexDirection: "row", // Align items in a row
-    // alignItems: "center", // Vertically center the items in the row
-    // justifyContent: "space-between", // Optional: Add space between name and icon
+    marginBottom: 12,
   },
   icon: {
     marginLeft: 10, // Optional: Add space between the name and ico
+  },
+  infoRow: {
+    marginBottom: 18,
+  },
+  label: {
+    color: "#666666",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  value: {
+    color: "#333333",
+    fontSize: 18,
   },
   notesFormContainer: {
     borderColor: "#d0d0d0",
@@ -127,26 +145,7 @@ const styles = StyleSheet.create({
   },
   notesForm: {
     padding: 6,
+    color: "#333333",
+    height: 100,
   },
-  // card: {
-  //   backgroundColor: "#ffffff",
-  //   borderRadius: 15, // Rounded corners
-  //   padding: 20,
-  //   shadowColor: "#000000",
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.1,
-  //   shadowRadius: 4,
-  //   elevation: 3, // Shadow for Android
-  // },
-  // cardTitle: {
-  //   fontSize: 18,
-  //   fontWeight: "bold",
-  //   marginBottom: 10,
-  // },
-  // row: {
-  //   flexDirection: "row", // Align items in a row
-  // },
-  // icon: {
-  //   marginLeft: 10, // Optional: Add space between the name and ico
-  // },
 });

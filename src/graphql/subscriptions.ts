@@ -14,6 +14,7 @@ export const onCreateMom = /* GraphQL */ `subscription OnCreateMom($filter: Mode
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -37,6 +38,7 @@ export const onUpdateMom = /* GraphQL */ `subscription OnUpdateMom($filter: Mode
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -60,6 +62,7 @@ export const onDeleteMom = /* GraphQL */ `subscription OnDeleteMom($filter: Mode
     firstName
     lastName
     openBills
+    notes
     courses {
       nextToken
       __typename
@@ -233,6 +236,7 @@ export const onCreateAttendance = /* GraphQL */ `subscription OnCreateAttendance
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -266,6 +270,7 @@ export const onUpdateAttendance = /* GraphQL */ `subscription OnUpdateAttendance
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -299,6 +304,7 @@ export const onDeleteAttendance = /* GraphQL */ `subscription OnDeleteAttendance
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -332,6 +338,7 @@ export const onCreateRegistration = /* GraphQL */ `subscription OnCreateRegistra
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -365,6 +372,7 @@ export const onUpdateRegistration = /* GraphQL */ `subscription OnUpdateRegistra
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename
@@ -398,6 +406,7 @@ export const onDeleteRegistration = /* GraphQL */ `subscription OnDeleteRegistra
       firstName
       lastName
       openBills
+      notes
       createdAt
       updatedAt
       __typename

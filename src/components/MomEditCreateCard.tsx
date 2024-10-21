@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     color: "#333333",
     fontWeight: "bold",
     fontSize: 16,
-    paddingBottom: 4,
+    paddingBottom: 6,
   },
   inputForm: {
     color: "#999999",

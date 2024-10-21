@@ -47,31 +47,39 @@ const SessionEditCreateCard = ({
 
   return (
     <View style={styles.card}>
-      <Text>
-        {date
-          ? formatToEuropeanDate(date)
-          : formatToEuropeanDate(selectedSession?.dateTime!)}
-      </Text>
-      <DateTimePicker
-        value={formState.dateTime}
-        mode="time"
-        is24Hour={true}
-        display="default"
-        onChange={(event, selectedTime) => {
-          if (selectedTime) {
-            const currentDate = formState.dateTime;
-            const updatedDateTime = new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate(),
-              selectedTime.getHours(),
-              selectedTime.getMinutes()
-            );
+      <View style={styles.cardHeader}>
+        <Text style={styles.cardHeaderText}>
+          {date
+            ? formatToEuropeanDate(date)
+            : formatToEuropeanDate(selectedSession?.dateTime!)}
+        </Text>
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Uhrzeit</Text>
+        <View style={styles.inputForm}>
+          <DateTimePicker
+            style={styles.dateTimePicker}
+            value={formState.dateTime}
+            mode="time"
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectedTime) => {
+              if (selectedTime) {
+                const currentDate = formState.dateTime;
+                const updatedDateTime = new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth(),
+                  currentDate.getDate(),
+                  selectedTime.getHours(),
+                  selectedTime.getMinutes()
+                );
 
-            setInput("dateTime", updatedDateTime);
-          }
-        }}
-      />
+                setInput("dateTime", updatedDateTime);
+              }
+            }}
+          />
+        </View>
+      </View>
       {!selectedSession && (
         <MultiSelect
           items={courses}
@@ -116,16 +124,28 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "flex-end",
     marginBottom: 12,
+    fontSize: 20,
+    fontWeight: "bold",
   },
   cardHeaderText: {
     fontSize: 18,
     fontWeight: "bold",
-    marginLeft: 12,
   },
-  input: {
-    marginBottom: 10,
-    fontSize: 22,
+  inputContainer: {
+    marginBottom: 24,
+  },
+  inputLabel: {
+    color: "#333333",
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingBottom: 6,
+  },
+  inputForm: {
+    flexDirection: "row",
+  },
+  dateTimePicker: {
+    marginLeft: -12,
   },
 });

@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { CustomMom } from "../types/MomType";
+import { TextInput } from "react-native-gesture-handler";
+import { generateClient } from "aws-amplify/api";
+import { updateMom } from "../graphql/mutations";
 
 const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
+  const client = generateClient();
+  const [notes, setNotes] = useState<string>(mom.notes ? mom.notes : "");
   function formatToEuropeanDate(dateTimeStr: string): string {
     const date = new Date(dateTimeStr);
     const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, add 1
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
+  }
+
+  async function updateNotes(newNotes: string): Promise<void> {
+    setNotes(newNotes);
+    await client.graphql({
+      query: updateMom,
+      variables: {
+        input: {
+          id: mom.id!,
+          notes: newNotes,
+        },
+      },
+    });
   }
 
   return (
@@ -53,6 +71,19 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
       </View>
       <Text>Mitglied seit: {formatToEuropeanDate(mom.createdAt!)}</Text>
       <Text>Teilnahmen: {mom.attendanceCount}</Text>
+      <View>
+        <Text>Notiz</Text>
+        <View style={styles.notesFormContainer}>
+          <TextInput
+            style={styles.notesForm}
+            selectionColor="#720039"
+            multiline={true}
+            numberOfLines={5}
+            onChangeText={(value) => updateNotes(value)}
+            value={notes}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -88,6 +119,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 10, // Optional: Add space between the name and ico
+  },
+  notesFormContainer: {
+    borderColor: "#d0d0d0",
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  notesForm: {
+    padding: 6,
   },
   // card: {
   //   backgroundColor: "#ffffff",

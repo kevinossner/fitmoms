@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -36,6 +36,72 @@ const MomDetailsScreen = () => {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
+  async function updateNotes(newNotes: string): Promise<void> {
+    await client.graphql({
+      query: updateMom,
+      variables: {
+        input: {
+          id: mom.id!,
+          notes: newNotes,
+        },
+      },
+    });
+  }
+
+  function openConfirmation() {
+    closeMenu();
+    Alert.alert(
+      "Bist du sicher?",
+      "Teilnehmerin wird unwiderruflich gelöscht",
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+        },
+        { text: "Bestätigen", onPress: () => destroyMom() },
+      ]
+    );
+  }
+
+  async function destroyMom() {
+    try {
+      const { data: registrationData } = await client.graphql({
+        query: registrationsByMomId,
+        variables: {
+          momId: mom.id!,
+        },
+      });
+
+      const registrationIds = registrationData.registrationsByMomId.items.map(
+        (item) => item.id
+      );
+
+      await Promise.all(
+        registrationIds.map((registrationId) =>
+          client.graphql({
+            query: deleteRegistration,
+            variables: {
+              input: { id: registrationId },
+            },
+          })
+        )
+      );
+
+      await client.graphql({
+        query: deleteMom,
+        variables: {
+          input: {
+            id: mom.id!,
+          },
+        },
+      });
+      closeMenu();
+      navigation.goBack();
+    } catch (err) {
+      console.log("error delete mom:", err);
+    }
+  }
+
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -64,9 +130,7 @@ const MomDetailsScreen = () => {
               }}
             />
             <Menu.Item
-              onPress={() => {
-                console.log("delete");
-              }}
+              onPress={openConfirmation}
               title="Löschen"
               leadingIcon="trash-can-outline"
             />
@@ -79,7 +143,7 @@ const MomDetailsScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#720039" />
         </TouchableOpacity>
         <View style={styles.content}>
-          <MomDetailsCard mom={mom} />
+          <MomDetailsCard mom={mom} onNotesChange={updateNotes} />
         </View>
       </View>
     </PaperProvider>

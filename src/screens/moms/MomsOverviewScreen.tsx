@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
   StyleSheet,
+  Text,
   View,
   Alert,
   FlatList,
@@ -52,6 +53,7 @@ const MomsOverviewScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.counter}>{moms.length}</Text>
       <FlatList
         data={moms}
         renderItem={({ item: mom }) => (
@@ -62,7 +64,10 @@ const MomsOverviewScreen = () => {
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("MomAdd")}
+      >
         <Ionicons name="add" size={24} color="#ffffff" />
       </TouchableOpacity>
     </View>
@@ -75,7 +80,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f0f0f0",
     flex: 1,
-    paddingTop: 15,
+  },
+  counter: {
+    marginRight: 20,
+    color: "#666666",
+    textAlign: "right",
   },
   addButton: {
     position: "absolute",

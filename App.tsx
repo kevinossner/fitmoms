@@ -10,7 +10,7 @@ import CalendarScreen from "./src/screens/calendar/CalendarScreen";
 import SessionDetailsScreen from "./src/screens/calendar/SessionDetailsScreen";
 import CourseDetailsScreen from "./src/screens/courses/CourseDetailsScreen";
 import MomDetailsScreen from "./src/screens/moms/MomDetailsScreen";
-import MomAddScreen from "./src/screens/moms_old/MomAddScreen";
+import MomAddScreen from "./src/screens/moms/MomAddScreen";
 import CourseOverviewScreen from "./src/screens/courses/CoursesOverviewScreen";
 import CourseAddScreen from "./src/screens/courses/CourseAddScreen";
 import SessionAddScreen from "./src/screens/calendar/SessionAddScreen";

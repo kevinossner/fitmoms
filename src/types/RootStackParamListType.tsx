@@ -5,7 +5,7 @@ import { CustomSession } from "./SessionType";
 export type RootStackParamList = {
   MomsOverview: undefined;
   MomDetails: { mom: MomDto };
-  MomAdd: { courses: Course[] };
+  MomAdd: undefined;
   CourseOverview: undefined;
   CourseAdd: { moms: MomDto[] };
   CourseDetails: { course: CourseFull; moms: MomDto[] };

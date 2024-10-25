@@ -3,11 +3,12 @@ import { StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { CustomMom } from "../types/MomType";
+import { Mom as MomDto } from "../API";
 import { TextInput } from "react-native-gesture-handler";
 import { generateClient } from "aws-amplify/api";
 import { updateMom } from "../graphql/mutations";
 
-const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
+const MomDetailsCard = ({ mom }: { mom: MomDto }) => {
   const client = generateClient();
   const [notes, setNotes] = useState<string>(mom.notes ? mom.notes : "");
   function formatToEuropeanDate(dateTimeStr: string): string {
@@ -49,12 +50,20 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
         )}
       </View>
       <View style={styles.courseRow}>
-        {mom.registratedCourses.map((course, index) => {
-          if (course.icon && course.icon in MaterialIcons.glyphMap) {
+        {mom.courses?.items.map((registration, index) => {
+          if (
+            registration &&
+            registration.course &&
+            registration.course.icon &&
+            registration.course.icon in MaterialIcons.glyphMap
+          ) {
             return (
               <MaterialIcons
                 key={index}
-                name={course.icon as keyof typeof MaterialIcons.glyphMap}
+                name={
+                  registration.course
+                    .icon as keyof typeof MaterialIcons.glyphMap
+                }
                 size={32}
                 color="#666666"
               />
@@ -76,7 +85,7 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Teilnahmen</Text>
-        <Text style={styles.value}>{mom.attendanceCount}</Text>
+        <Text style={styles.value}>{mom.attendances?.items.length}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Notiz</Text>

@@ -42,7 +42,7 @@ const MomsOverviewScreen = () => {
           if (a.firstName < b.firstName) return -1;
           if (a.firstName > b.firstName) return 1;
 
-          return 0; // Names are equal
+          return 0;
         });
         setMoms(fetchedMoms);
       }

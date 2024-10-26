@@ -1,16 +1,16 @@
 import { Course } from "./CourseType";
 
-export type Mom = {
-  id?: string;
+export type NewMom = {
   firstName: string;
   lastName: string;
-  createdAt?: string;
-  updatedAt?: string;
   openBills: boolean;
-  notes?: string;
-};
-
-export type CustomMom = Mom & {
+  notes: string;
   registratedCourses: Course[];
   attendanceCount: number;
+};
+
+export type Mom = NewMom & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
 };

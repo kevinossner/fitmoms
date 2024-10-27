@@ -9,94 +9,71 @@ import { Button, Menu, PaperProvider } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { generateClient } from "aws-amplify/api";
 import { registrationsByMomId } from "../../graphql/queries";
-import {
-  deleteMom,
-  updateMom,
-  deleteRegistration,
-} from "../../graphql/mutations";
-import { Mom as MomDto } from "../../API";
+import { deleteCourse, deleteRegistration } from "../../graphql/mutations";
+import { Course as CourseDto } from "../../API";
 
-type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "MomDetails">;
+type CourseDetailsScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "CourseDetails"
+>;
 const client = generateClient();
 
-const MomDetailsScreen = () => {
+const CourseDetailsScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const route = useRoute<MomDetailsScreenRouteProp>();
+  const route = useRoute<CourseDetailsScreenRouteProp>();
 
-  const { mom: initialMom } = route.params;
-  const [mom, setMom] = useState<MomDto>(initialMom);
+  const { course: initialCourse } = route.params;
+  const [course, setCourse] = useState<CourseDto>(initialCourse);
   const [visible, setVisible] = React.useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
   useFocusEffect(
     useCallback(() => {
-      if (route.params?.mom) {
-        setMom(route.params.mom);
+      if (route.params?.course) {
+        setCourse(route.params.course);
       }
-    }, [route.params?.mom])
+    }, [route.params?.course])
   );
 
-  async function updateNotes(newNotes: string): Promise<void> {
-    await client.graphql({
-      query: updateMom,
-      variables: {
-        input: {
-          id: mom.id!,
-          notes: newNotes,
-        },
-      },
-    });
-  }
-
   function openConfirmation() {
-    Alert.alert(
-      "Bist du sicher?",
-      "Teilnehmerin wird unwiderruflich gelöscht",
-      [
-        {
-          text: "Abbrechen",
-          style: "cancel",
-        },
-        { text: "Bestätigen", onPress: () => destroyMom() },
-      ]
-    );
+    Alert.alert("Bist du sicher?", "Kurs wird unwiderruflich gelöscht", [
+      {
+        text: "Abbrechen",
+        style: "cancel",
+      },
+      { text: "Bestätigen", onPress: () => destroyCourse() },
+    ]);
   }
 
-  async function destroyMom() {
+  async function destroyCourse() {
     try {
-      const { data: registrationData } = await client.graphql({
-        query: registrationsByMomId,
-        variables: {
-          momId: mom.id!,
-        },
-      });
-
-      const registrationIds = registrationData.registrationsByMomId.items.map(
-        (item) => item.id
+      const registrationIds = course.moms?.items.map(
+        (registration) => registration!.id
       );
-
-      await Promise.all(
-        registrationIds.map((registrationId) =>
-          client.graphql({
-            query: deleteRegistration,
-            variables: {
-              input: { id: registrationId },
-            },
-          })
-        )
-      );
-
+      if (registrationIds) {
+        await Promise.all(
+          registrationIds.map((registrationId) =>
+            client.graphql({
+              query: deleteRegistration,
+              variables: {
+                input: { id: registrationId },
+              },
+            })
+          )
+        );
+      }
       await client.graphql({
-        query: deleteMom,
+        query: deleteCourse,
         variables: {
           input: {
-            id: mom.id!,
+            id: course.id,
           },
         },
       });
       closeMenu();
       navigation.goBack();
+      console.log(registrationIds);
     } catch (error) {
       Alert.alert("Error", `${error}`);
     }
@@ -126,7 +103,7 @@ const MomDetailsScreen = () => {
               title="Bearbeiten"
               leadingIcon="pencil-outline"
               onPress={() => {
-                navigation.navigate("MomEdit", { mom });
+                // navigation.navigate("CourseEdit", { course });
                 closeMenu();
               }}
             />
@@ -147,14 +124,14 @@ const MomDetailsScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#720039" />
         </TouchableOpacity>
         <View style={styles.content}>
-          <MomDetailsCard mom={mom} onNotesChange={updateNotes} />
+          {/* <MomDetailsCard mom={mom} onNotesChange={updateNotes} /> */}
         </View>
       </View>
     </PaperProvider>
   );
 };
 
-export default MomDetailsScreen;
+export default CourseDetailsScreen;
 
 const styles = StyleSheet.create({
   container: {

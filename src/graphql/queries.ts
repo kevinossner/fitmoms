@@ -499,3 +499,55 @@ export const getMomWithRelations = /* GraphQL */ `
     }
   }
 `;
+
+export const listCoursesWithRelations = /* GraphQL */ `
+  query ListCoursesWithRelations(
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        icon
+        createdAt
+        updatedAt
+        __typename
+        moms {
+          items {
+            id # This is the Registration ID
+            mom {
+              id
+              firstName
+              lastName
+              openBills
+              notes
+              createdAt
+              updatedAt
+              __typename
+            }
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        sessions {
+          items {
+            id
+            dateTime
+            courseID
+            createdAt
+            updatedAt
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

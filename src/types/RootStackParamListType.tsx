@@ -1,4 +1,4 @@
-import { Course, Mom as MomDto } from "../API";
+import { Course as CourseDto, Mom as MomDto } from "../API";
 import { CourseFull } from "./CourseType";
 import { CustomSession } from "./SessionType";
 
@@ -8,8 +8,8 @@ export type RootStackParamList = {
   MomAdd: undefined;
   MomEdit: { mom: MomDto };
   CourseOverview: undefined;
-  CourseAdd: { moms: MomDto[] };
-  CourseDetails: { course: CourseFull; moms: MomDto[] };
+  CourseAdd: undefined;
+  CourseDetails: { course: CourseDto };
   Calendar: undefined;
   SessionDetails: { session: CustomSession; courses: CourseFull[] };
   SessionAdd: { courses: CourseFull[]; date: string };

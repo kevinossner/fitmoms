@@ -8,7 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import MomsOverviewScreen from "./src/screens/moms/MomsOverviewScreen";
 import CalendarScreen from "./src/screens/calendar/CalendarScreen";
 import SessionDetailsScreen from "./src/screens/calendar/SessionDetailsScreen";
-import CourseDetailsScreen from "./src/screens/courses/CourseDetailsScreen";
+// import CourseDetailsScreen from "./src/screens/courses/CourseDetailsScreen";
 import MomDetailsScreen from "./src/screens/moms/MomDetailsScreen";
 import MomAddScreen from "./src/screens/moms/MomAddScreen";
 import MomEditScreen from "./src/screens/moms/MomEditScreen";
@@ -62,11 +62,11 @@ const CourseStack = () => {
         component={CourseOverviewScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="CourseDetails"
         component={CourseDetailsScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="CourseAdd"
         component={CourseAddScreen}

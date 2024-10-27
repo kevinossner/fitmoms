@@ -47,7 +47,7 @@ const MomsOverviewScreen = () => {
         setMoms(fetchedMoms);
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch moms data. Please try again.");
+      Alert.alert("Error", "Daten konnten nicht geladen werden.");
     }
   };
 

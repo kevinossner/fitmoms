@@ -88,18 +88,18 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 20, // Adjust the position from the bottom
-    right: 30, // Adjust the position from the right
+    bottom: 20,
+    right: 30,
     width: 65,
     height: 65,
     borderRadius: 50,
     backgroundColor: "#720039",
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    justifyContent: "center",
+    alignItems: "center",
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 5, // Add some elevation to the button for shadow
+    elevation: 5,
   },
 });

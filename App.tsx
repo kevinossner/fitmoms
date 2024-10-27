@@ -11,6 +11,7 @@ import SessionDetailsScreen from "./src/screens/calendar/SessionDetailsScreen";
 import CourseDetailsScreen from "./src/screens/courses/CourseDetailsScreen";
 import MomDetailsScreen from "./src/screens/moms/MomDetailsScreen";
 import MomAddScreen from "./src/screens/moms/MomAddScreen";
+import MomEditScreen from "./src/screens/moms/MomEditScreen";
 import CourseOverviewScreen from "./src/screens/courses/CoursesOverviewScreen";
 import CourseAddScreen from "./src/screens/courses/CourseAddScreen";
 import SessionAddScreen from "./src/screens/calendar/SessionAddScreen";
@@ -41,6 +42,11 @@ const MomsStack = () => {
       <Stack.Screen
         name="MomAdd"
         component={MomAddScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MomEdit"
+        component={MomEditScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

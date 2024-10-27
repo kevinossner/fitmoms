@@ -456,3 +456,46 @@ export const listMomsWithRelations = /* GraphQL */ `
     }
   }
 `;
+
+export const getMomWithRelations = /* GraphQL */ `
+  query GetMomWithRelations($id: ID!) {
+    getMom(id: $id) {
+      id
+      firstName
+      lastName
+      openBills
+      notes
+      createdAt
+      updatedAt
+      courses {
+        items {
+          id # Registration ID
+          course {
+            id
+            name
+            icon
+            createdAt
+            updatedAt
+            __typename
+          }
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      attendances {
+        items {
+          id
+          momID
+          sessionID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;

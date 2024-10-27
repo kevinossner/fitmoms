@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MomDetailsCard from "../../components/MomDetailsCard";
 import MomEditCreateCard from "../../components/MomEditCreateCard";
 import { Button, Menu, PaperProvider } from "react-native-paper";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { generateClient } from "aws-amplify/api";
 import {
   attendancesByMomIDAndSessionID,
@@ -26,15 +27,22 @@ type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "MomDetails">;
 const client = generateClient();
 
 const MomDetailsScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const route = useRoute<MomDetailsScreenRouteProp>();
 
   const { mom: initialMom } = route.params;
   const [mom, setMom] = useState<MomDto>(initialMom);
   const [visible, setVisible] = React.useState(false);
-  const [editable, setEditable] = React.useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params?.mom) {
+        setMom(route.params.mom);
+      }
+    }, [route.params?.mom])
+  );
 
   async function updateNotes(newNotes: string): Promise<void> {
     await client.graphql({
@@ -49,7 +57,6 @@ const MomDetailsScreen = () => {
   }
 
   function openConfirmation() {
-    closeMenu();
     Alert.alert(
       "Bist du sicher?",
       "Teilnehmerin wird unwiderruflich gelöscht",
@@ -126,11 +133,15 @@ const MomDetailsScreen = () => {
               title="Bearbeiten"
               leadingIcon="pencil-outline"
               onPress={() => {
-                console.log("edit");
+                navigation.navigate("MomEdit", { mom });
+                closeMenu();
               }}
             />
             <Menu.Item
-              onPress={openConfirmation}
+              onPress={() => {
+                openConfirmation();
+                closeMenu();
+              }}
               title="Löschen"
               leadingIcon="trash-can-outline"
             />
@@ -160,17 +171,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    left: 10, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    left: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   actionButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    right: 10, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    right: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
     marginTop: 20,

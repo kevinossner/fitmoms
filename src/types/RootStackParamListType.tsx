@@ -6,6 +6,7 @@ export type RootStackParamList = {
   MomsOverview: undefined;
   MomDetails: { mom: MomDto };
   MomAdd: undefined;
+  MomEdit: { mom: MomDto };
   CourseOverview: undefined;
   CourseAdd: { moms: MomDto[] };
   CourseDetails: { course: CourseFull; moms: MomDto[] };

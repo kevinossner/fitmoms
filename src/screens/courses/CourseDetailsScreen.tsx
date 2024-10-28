@@ -102,7 +102,7 @@ const CourseDetailsScreen = () => {
               title="Bearbeiten"
               leadingIcon="pencil-outline"
               onPress={() => {
-                // navigation.navigate("CourseEdit", { course });
+                navigation.navigate("CourseEdit", { course });
                 closeMenu();
               }}
             />

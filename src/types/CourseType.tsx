@@ -5,12 +5,19 @@ export type NewCourse = {
   registratedMoms: MomDto[];
 };
 
-export type Course = {
-  id?: string;
-  name: string;
+export type Course = NewCourse & {
+  id: string;
   icon?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
-export type CourseFull = Course & { registratedMoms: Mom[] };
+// export type Course = {
+//   id?: string;
+//   name: string;
+//   icon?: string;
+//   createdAt?: string;
+//   updatedAt?: string;
+// };
+
+// export type CourseFull = Course & { registratedMoms: Mom[] };

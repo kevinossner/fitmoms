@@ -9,7 +9,6 @@ import { Mom as MomDto } from "../../API";
 import { Course as CourseDto } from "../../API";
 import { generateClient } from "aws-amplify/api";
 import { Mom, NewMom } from "../../types/MomType";
-import { Course } from "../../types/CourseType";
 import MomEditCard from "../../components/MomEditCard";
 import { listCourses, getMomWithRelations } from "../../graphql/queries";
 import {
@@ -28,7 +27,7 @@ const MomEditScreen = () => {
   const route = useRoute<MomEditScreenRouteProp>();
   const { mom: initialMom } = route.params;
   const initialCourses = initialMom.courses?.items.map((registration) => {
-    return registration?.course as Course;
+    return registration?.course;
   });
   const [mom, setMom] = useState<Mom>({
     id: initialMom.id,
@@ -212,11 +211,7 @@ const MomEditScreen = () => {
         <Ionicons name="arrow-back" size={28} color="#720039" />
       </TouchableOpacity>
       <View style={styles.content}>
-        <MomEditCard
-          courses={courses as Course[]}
-          mom={mom}
-          onChange={handleFormChange}
-        />
+        <MomEditCard courses={courses} mom={mom} onChange={handleFormChange} />
       </View>
       <TouchableOpacity onPress={onSave} style={styles.actionButton}>
         <Ionicons name="save" size={24} color="#720039" />

@@ -10,14 +10,14 @@ import {
 import MultiSelect from "react-native-multiple-select";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NewMom, Mom } from "../types/MomType";
-import { Course } from "../types/CourseType";
+import { Course as CourseDto } from "../API";
 
 const MomEditCard = ({
   courses,
   mom,
   onChange,
 }: {
-  courses: Course[];
+  courses: CourseDto[];
   mom: NewMom | Mom;
   onChange: (formState: NewMom | Mom) => void;
 }) => {
@@ -28,11 +28,14 @@ const MomEditCard = ({
   const handleCourseSelect = (selectedCourseIds: string[]) => {
     const selectedCourses = courses.filter((course) =>
       selectedCourseIds.includes(course.id!)
-    ) as Course[];
+    ) as CourseDto[];
     setInput("registratedCourses", selectedCourses);
   };
 
-  function setInput(key: string, value: string | number | boolean | Course[]) {
+  function setInput(
+    key: string,
+    value: string | number | boolean | CourseDto[]
+  ) {
     setFormState((prevState) => ({ ...prevState, [key]: value }));
   }
 

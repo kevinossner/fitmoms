@@ -133,7 +133,7 @@ const MomAddScreen = () => {
       </TouchableOpacity>
       <View style={styles.content}>
         <MomEditCard
-          courses={courses as Course[]}
+          courses={courses as CourseDto[]}
           mom={mom}
           onChange={handleFormChange}
         />

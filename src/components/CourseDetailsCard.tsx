@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { CourseFull } from "../types/CourseType";
 import { Course as CourseDto } from "../API";
 
 const CourseDetailsCard = ({ course }: { course: CourseDto }) => {

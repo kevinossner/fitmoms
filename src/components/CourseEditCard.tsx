@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 import MultiSelect from "react-native-multiple-select";
-import { NewCourse } from "../types/CourseType";
+import { NewCourse, Course } from "../types/CourseType";
 import { Mom as MomDto } from "../API";
 
 const CourseEditCard = ({
@@ -10,7 +10,7 @@ const CourseEditCard = ({
   onChange,
 }: {
   moms: MomDto[];
-  course: NewCourse;
+  course: NewCourse | Course;
   onChange: (formState: NewCourse) => void;
 }) => {
   const [formState, setFormState] = useState(course);

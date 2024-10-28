@@ -5,7 +5,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Mom as MomDto } from "../API";
 import { TextInput } from "react-native-gesture-handler";
 import { generateClient } from "aws-amplify/api";
-import { updateMom } from "../graphql/mutations";
 
 const MomDetailsCard = ({
   mom,

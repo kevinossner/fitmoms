@@ -4,7 +4,7 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/RootStackParamListType";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MomDetailsCard from "../../components/MomDetailsCard";
+import CourseDetailsCard from "../../components/CourseDetailsCard";
 import { Button, Menu, PaperProvider } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { generateClient } from "aws-amplify/api";
@@ -73,7 +73,6 @@ const CourseDetailsScreen = () => {
       });
       closeMenu();
       navigation.goBack();
-      console.log(registrationIds);
     } catch (error) {
       Alert.alert("Error", `${error}`);
     }
@@ -124,7 +123,7 @@ const CourseDetailsScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#720039" />
         </TouchableOpacity>
         <View style={styles.content}>
-          {/* <MomDetailsCard mom={mom} onNotesChange={updateNotes} /> */}
+          <CourseDetailsCard course={course} />
         </View>
       </View>
     </PaperProvider>

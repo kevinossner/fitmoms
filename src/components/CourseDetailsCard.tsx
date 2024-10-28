@@ -2,8 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { CourseFull } from "../types/CourseType";
+import { Course as CourseDto } from "../API";
 
-const CourseDetailsCard = ({ course }: { course: CourseFull }) => {
+const CourseDetailsCard = ({ course }: { course: CourseDto }) => {
   function formatToEuropeanDate(dateTimeStr: string): string {
     const date = new Date(dateTimeStr);
     const day = String(date.getDate()).padStart(2, "0");
@@ -28,10 +29,10 @@ const CourseDetailsCard = ({ course }: { course: CourseFull }) => {
       <View style={styles.cardContent}>
         <Text>Mamas:</Text>
         <FlatList
-          data={course.registratedMoms}
+          data={course.moms?.items}
           renderItem={({ item: mom }) => (
             <Text>
-              - {mom.firstName} {mom.lastName}
+              - {mom?.mom.firstName} {mom?.mom.lastName}
             </Text>
           )}
         />

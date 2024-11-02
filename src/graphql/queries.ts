@@ -551,3 +551,46 @@ export const listCoursesWithRelations = /* GraphQL */ `
     }
   }
 `;
+
+export const getCourseWithRelations = /* GraphQL */ `
+  query GetCourseWithRelations($id: ID!) {
+    getCourse(id: $id) {
+      id
+      name
+      icon
+      createdAt
+      updatedAt
+      moms {
+        items {
+          id # Registration ID
+          mom {
+            id
+            firstName
+            lastName
+            openBills
+            notes
+            createdAt
+            updatedAt
+            __typename
+          }
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      sessions {
+        items {
+          id
+          dateTime
+          courseID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;

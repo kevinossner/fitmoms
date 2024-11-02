@@ -112,9 +112,9 @@ const MomEditScreen = () => {
         );
       }
       await Promise.all(
-        registrationsToDelete.map((registration) => {
+        registrationsToDelete.map(async (registration) => {
           if (registration.id) {
-            client.graphql({
+            await client.graphql({
               query: deleteRegistration,
               variables: {
                 input: { id: registration.id },

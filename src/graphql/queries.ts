@@ -29,7 +29,8 @@ export const getMom = /* GraphQL */ `query GetMom($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetMomQueryVariables, APITypes.GetMomQuery>;
-export const listMoms = /* GraphQL */ `query ListMoms($filter: ModelMomFilterInput, $limit: Int, $nextToken: String) {
+export const listMoms =
+  /* GraphQL */ `query ListMoms($filter: ModelMomFilterInput, $limit: Int, $nextToken: String) {
   listMoms(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
@@ -243,7 +244,8 @@ export const listRegistrations = /* GraphQL */ `query ListRegistrations(
   APITypes.ListRegistrationsQueryVariables,
   APITypes.ListRegistrationsQuery
 >;
-export const sessionsByCourseIDAndDateTime = /* GraphQL */ `query SessionsByCourseIDAndDateTime(
+export const sessionsByCourseIDAndDateTime =
+  /* GraphQL */ `query SessionsByCourseIDAndDateTime(
   $courseID: ID!
   $dateTime: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -272,10 +274,11 @@ export const sessionsByCourseIDAndDateTime = /* GraphQL */ `query SessionsByCour
   }
 }
 ` as GeneratedQuery<
-  APITypes.SessionsByCourseIDAndDateTimeQueryVariables,
-  APITypes.SessionsByCourseIDAndDateTimeQuery
->;
-export const attendancesByMomIDAndSessionID = /* GraphQL */ `query AttendancesByMomIDAndSessionID(
+    APITypes.SessionsByCourseIDAndDateTimeQueryVariables,
+    APITypes.SessionsByCourseIDAndDateTimeQuery
+  >;
+export const attendancesByMomIDAndSessionID =
+  /* GraphQL */ `query AttendancesByMomIDAndSessionID(
   $momID: ID!
   $sessionID: ModelIDKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -304,10 +307,11 @@ export const attendancesByMomIDAndSessionID = /* GraphQL */ `query AttendancesBy
   }
 }
 ` as GeneratedQuery<
-  APITypes.AttendancesByMomIDAndSessionIDQueryVariables,
-  APITypes.AttendancesByMomIDAndSessionIDQuery
->;
-export const attendancesBySessionIDAndMomID = /* GraphQL */ `query AttendancesBySessionIDAndMomID(
+    APITypes.AttendancesByMomIDAndSessionIDQueryVariables,
+    APITypes.AttendancesByMomIDAndSessionIDQuery
+  >;
+export const attendancesBySessionIDAndMomID =
+  /* GraphQL */ `query AttendancesBySessionIDAndMomID(
   $sessionID: ID!
   $momID: ModelIDKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -336,9 +340,9 @@ export const attendancesBySessionIDAndMomID = /* GraphQL */ `query AttendancesBy
   }
 }
 ` as GeneratedQuery<
-  APITypes.AttendancesBySessionIDAndMomIDQueryVariables,
-  APITypes.AttendancesBySessionIDAndMomIDQuery
->;
+    APITypes.AttendancesBySessionIDAndMomIDQueryVariables,
+    APITypes.AttendancesBySessionIDAndMomIDQuery
+  >;
 export const registrationsByMomId = /* GraphQL */ `query RegistrationsByMomId(
   $momId: ID!
   $sortDirection: ModelSortDirection
@@ -369,7 +373,8 @@ export const registrationsByMomId = /* GraphQL */ `query RegistrationsByMomId(
   APITypes.RegistrationsByMomIdQueryVariables,
   APITypes.RegistrationsByMomIdQuery
 >;
-export const registrationsByCourseId = /* GraphQL */ `query RegistrationsByCourseId(
+export const registrationsByCourseId =
+  /* GraphQL */ `query RegistrationsByCourseId(
   $courseId: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelRegistrationFilterInput
@@ -396,6 +401,196 @@ export const registrationsByCourseId = /* GraphQL */ `query RegistrationsByCours
   }
 }
 ` as GeneratedQuery<
-  APITypes.RegistrationsByCourseIdQueryVariables,
-  APITypes.RegistrationsByCourseIdQuery
->;
+    APITypes.RegistrationsByCourseIdQueryVariables,
+    APITypes.RegistrationsByCourseIdQuery
+  >;
+
+export const listMomsWithRelations = /* GraphQL */ `
+  query ListMomsWithRelations(
+    $filter: ModelMomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMoms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        openBills
+        notes
+        createdAt
+        updatedAt
+        # Access courses through the Registration model
+        courses {
+          items {
+            id # This is the Registration ID
+            course {
+              id
+              name
+              icon
+              createdAt
+              updatedAt
+              __typename
+            }
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        attendances {
+          items {
+            id
+            momID
+            sessionID
+            createdAt
+            updatedAt
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+
+export const getMomWithRelations = /* GraphQL */ `
+  query GetMomWithRelations($id: ID!) {
+    getMom(id: $id) {
+      id
+      firstName
+      lastName
+      openBills
+      notes
+      createdAt
+      updatedAt
+      courses {
+        items {
+          id # Registration ID
+          course {
+            id
+            name
+            icon
+            createdAt
+            updatedAt
+            __typename
+          }
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      attendances {
+        items {
+          id
+          momID
+          sessionID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+
+export const listCoursesWithRelations = /* GraphQL */ `
+  query ListCoursesWithRelations(
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        icon
+        createdAt
+        updatedAt
+        __typename
+        moms {
+          items {
+            id # This is the Registration ID
+            mom {
+              id
+              firstName
+              lastName
+              openBills
+              notes
+              createdAt
+              updatedAt
+              __typename
+            }
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        sessions {
+          items {
+            id
+            dateTime
+            courseID
+            createdAt
+            updatedAt
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+
+export const getCourseWithRelations = /* GraphQL */ `
+  query GetCourseWithRelations($id: ID!) {
+    getCourse(id: $id) {
+      id
+      name
+      icon
+      createdAt
+      updatedAt
+      moms {
+        items {
+          id # Registration ID
+          mom {
+            id
+            firstName
+            lastName
+            openBills
+            notes
+            createdAt
+            updatedAt
+            __typename
+          }
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      sessions {
+        items {
+          id
+          dateTime
+          courseID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;

@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TextInput, Text } from "react-native";
-import { CourseFull } from "../types/CourseType";
-import { Mom } from "../API";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import MultiSelect from "react-native-multiple-select";
+import { NewCourse, Course } from "../types/CourseType";
+import { Mom as MomDto } from "../API";
 
-const initialCourse: CourseFull = {
-  name: "",
-  registratedMoms: [],
-};
-
-const CourseEditCreateCard = ({
-  course,
+const CourseEditCard = ({
   moms,
+  course,
   onChange,
 }: {
-  course?: CourseFull;
-  moms: Mom[];
-  onChange: (formState: CourseFull) => void;
+  moms: MomDto[];
+  course: NewCourse | Course;
+  onChange: (formState: NewCourse) => void;
 }) => {
-  const [formState, setFormState] = useState(
-    course
-      ? ({
-          name: course.name,
-          registratedMoms: course.registratedMoms,
-        } as CourseFull)
-      : initialCourse
-  );
+  const [formState, setFormState] = useState(course);
+  useEffect(() => {
+    onChange(formState);
+  }, [formState, onChange]);
 
-  function setInput(key: string, value: string | Mom[]) {
+  function setInput(key: string, value: string | MomDto[]) {
     setFormState((prevState) => {
       const updatedState = { ...prevState, [key]: value };
       onChange(updatedState);
@@ -41,9 +32,8 @@ const CourseEditCreateCard = ({
 
   const preparedMoms = moms.map((mom) => ({
     ...mom,
-    fullName: `${mom.firstName} ${mom.lastName}`, // Combine first and last names
+    fullName: `${mom.firstName} ${mom.lastName}`,
   }));
-
   return (
     <View style={styles.card}>
       <View style={styles.inputContainer}>
@@ -77,7 +67,7 @@ const CourseEditCreateCard = ({
   );
 };
 
-export default CourseEditCreateCard;
+export default CourseEditCard;
 
 const styles = StyleSheet.create({
   card: {

@@ -1,11 +1,23 @@
-import { Mom } from "../API";
+import { Mom, Mom as MomDto } from "../API";
 
-export type Course = {
-  id?: string;
+export type NewCourse = {
   name: string;
-  icon?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  registratedMoms: MomDto[];
 };
 
-export type CourseFull = Course & { registratedMoms: Mom[] };
+export type Course = NewCourse & {
+  id: string;
+  icon?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// export type Course = {
+//   id?: string;
+//   name: string;
+//   icon?: string;
+//   createdAt?: string;
+//   updatedAt?: string;
+// };
+
+// export type CourseFull = Course & { registratedMoms: Mom[] };

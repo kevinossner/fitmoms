@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { CourseFull } from "../types/CourseType";
+import { Course as CourseDto } from "../API";
 
-const CourseCard = ({ course }: { course: CourseFull }) => {
+const CourseCard = ({ course }: { course: CourseDto }) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -25,7 +25,7 @@ const CourseCard = ({ course }: { course: CourseFull }) => {
         )}
         <Text style={styles.cardTitle}>{course.name}</Text>
       </View>
-      <Text style={styles.info}>Mamas: {course.registratedMoms.length}</Text>
+      <Text style={styles.info}>Mamas: {course.moms?.items.length}</Text>
     </View>
   );
 };

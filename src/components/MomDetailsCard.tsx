@@ -2,35 +2,31 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { CustomMom } from "../types/MomType";
+import { Mom as MomDto } from "../API";
 import { TextInput } from "react-native-gesture-handler";
 import { generateClient } from "aws-amplify/api";
-import { updateMom } from "../graphql/mutations";
 
-const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
+const MomDetailsCard = ({
+  mom,
+  onNotesChange,
+}: {
+  mom: MomDto;
+  onNotesChange: (newNotes: string) => void;
+}) => {
   const client = generateClient();
   const [notes, setNotes] = useState<string>(mom.notes ? mom.notes : "");
   function formatToEuropeanDate(dateTimeStr: string): string {
     const date = new Date(dateTimeStr);
-    const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, add 1
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   }
 
-  async function updateNotes(newNotes: string): Promise<void> {
+  const handleNotesChange = (newNotes: string) => {
     setNotes(newNotes);
-    mom.notes = newNotes;
-    await client.graphql({
-      query: updateMom,
-      variables: {
-        input: {
-          id: mom.id!,
-          notes: newNotes,
-        },
-      },
-    });
-  }
+    onNotesChange(newNotes);
+  };
 
   return (
     <View style={styles.card}>
@@ -49,12 +45,20 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
         )}
       </View>
       <View style={styles.courseRow}>
-        {mom.registratedCourses.map((course, index) => {
-          if (course.icon && course.icon in MaterialIcons.glyphMap) {
+        {mom.courses?.items.map((registration, index) => {
+          if (
+            registration &&
+            registration.course &&
+            registration.course.icon &&
+            registration.course.icon in MaterialIcons.glyphMap
+          ) {
             return (
               <MaterialIcons
                 key={index}
-                name={course.icon as keyof typeof MaterialIcons.glyphMap}
+                name={
+                  registration.course
+                    .icon as keyof typeof MaterialIcons.glyphMap
+                }
                 size={32}
                 color="#666666"
               />
@@ -76,7 +80,7 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Teilnahmen</Text>
-        <Text style={styles.value}>{mom.attendanceCount}</Text>
+        <Text style={styles.value}>{mom.attendances?.items.length}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Notiz</Text>
@@ -85,7 +89,7 @@ const MomDetailsCard = ({ mom }: { mom: CustomMom }) => {
             style={styles.notesForm}
             selectionColor="#720039"
             multiline={true}
-            onChangeText={(value) => updateNotes(value)}
+            onChangeText={handleNotesChange}
             value={notes}
           />
         </View>

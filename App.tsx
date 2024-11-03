@@ -11,8 +11,10 @@ import SessionDetailsScreen from "./src/screens/calendar/SessionDetailsScreen";
 import CourseDetailsScreen from "./src/screens/courses/CourseDetailsScreen";
 import MomDetailsScreen from "./src/screens/moms/MomDetailsScreen";
 import MomAddScreen from "./src/screens/moms/MomAddScreen";
+import MomEditScreen from "./src/screens/moms/MomEditScreen";
 import CourseOverviewScreen from "./src/screens/courses/CoursesOverviewScreen";
 import CourseAddScreen from "./src/screens/courses/CourseAddScreen";
+import CourseEditScreen from "./src/screens/courses/CourseEditScreen";
 import SessionAddScreen from "./src/screens/calendar/SessionAddScreen";
 import { RootStackParamList } from "./src/types/RootStackParamListType";
 import { Amplify } from "aws-amplify";
@@ -43,6 +45,11 @@ const MomsStack = () => {
         component={MomAddScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="MomEdit"
+        component={MomEditScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -64,6 +71,11 @@ const CourseStack = () => {
       <Stack.Screen
         name="CourseAdd"
         component={CourseAddScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CourseEdit"
+        component={CourseEditScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

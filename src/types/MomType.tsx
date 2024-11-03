@@ -1,16 +1,17 @@
 import { Course } from "./CourseType";
+import { Course as CourseDto } from "../API";
 
-export type Mom = {
-  id?: string;
+export type NewMom = {
   firstName: string;
   lastName: string;
-  createdAt?: string;
-  updatedAt?: string;
   openBills: boolean;
-  notes?: string;
+  notes: string;
+  registratedCourses: CourseDto[];
+  attendanceCount: number;
 };
 
-export type CustomMom = Mom & {
-  registratedCourses: Course[];
-  attendanceCount: number;
+export type Mom = NewMom & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
 };

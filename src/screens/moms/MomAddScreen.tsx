@@ -1,38 +1,40 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../../types/RootStackParamListType";
+import React, { useState, useCallback } from "react";
+import { StyleSheet, View, TouchableOpacity, Alert, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { Course as CourseDto } from "../../API";
+import { Course } from "../../types/CourseType";
+import { NewMom } from "../../types/MomType";
 import { generateClient } from "aws-amplify/api";
+import { listCourses } from "../../graphql/queries";
 import {
   createMom,
   createRegistration,
   createAttendance,
 } from "../../graphql/mutations";
-import MomEditCreateCard from "../../components/MomEditCreateCard";
-import { Course } from "../../API";
-import { CustomMom } from "../../types/MomType";
+import MomEditCard from "../../components/MomEditCard";
 
-type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "MomAdd">;
 const client = generateClient();
-
-const initialMom: CustomMom = {
-  firstName: "",
-  lastName: "",
-  openBills: false,
-  registratedCourses: [],
-  attendanceCount: 0,
-};
 
 const MomAddScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute<MomDetailsScreenRouteProp>();
-  const { courses: initialCourses } = route.params;
-  const [courses, setCourses] = useState<Course[]>(initialCourses);
-  const [mom, setMom] = useState<CustomMom>(initialMom);
+  const [courses, setCourses] = useState<CourseDto[]>([]);
+  const [mom, setMom] = useState<NewMom>({
+    firstName: "",
+    lastName: "",
+    openBills: false,
+    notes: "",
+    registratedCourses: [],
+    attendanceCount: 0,
+  });
 
-  function handleFormChange(updatedMom: CustomMom) {
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
+
+  function handleFormChange(updatedMom: NewMom) {
     setMom((prevMom) => {
       if (
         prevMom.firstName === updatedMom.firstName &&
@@ -55,10 +57,29 @@ const MomAddScreen = () => {
     });
   }
 
+  const fetchData = async () => {
+    try {
+      const coursesQuery = await client.graphql({
+        query: listCourses,
+      });
+      const fetchedCourses = coursesQuery.data.listCourses.items as CourseDto[];
+      fetchedCourses.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+      setCourses(fetchedCourses);
+    } catch (error) {
+      Alert.alert("Error", "Daten konnten nicht geladen werden.");
+    }
+  };
+
   async function addMom() {
     try {
-      if (mom.firstName === "" || mom.lastName === "") return;
-
+      if (mom.firstName === "" || mom.lastName === "") {
+        Alert.alert("Error", "Vor- und Nachnamen ausfüllen.");
+        return;
+      }
       const response = await client.graphql({
         query: createMom,
         variables: {
@@ -69,9 +90,7 @@ const MomAddScreen = () => {
           },
         },
       });
-
       const newMomId = response.data.createMom.id;
-
       await Promise.all(
         mom.registratedCourses.map(async (course) => {
           await client.graphql({
@@ -85,7 +104,6 @@ const MomAddScreen = () => {
           });
         })
       );
-
       if (mom.attendanceCount > 0) {
         for (let i = 0; i < mom.attendanceCount; i++) {
           await client.graphql({
@@ -99,10 +117,9 @@ const MomAddScreen = () => {
           });
         }
       }
-
       navigation.goBack();
-    } catch (err) {
-      console.log("error creating mom:", err);
+    } catch (error) {
+      Alert.alert("Error", `${error}`);
     }
   }
 
@@ -115,7 +132,11 @@ const MomAddScreen = () => {
         <Ionicons name="arrow-back" size={28} color="#720039" />
       </TouchableOpacity>
       <View style={styles.content}>
-        <MomEditCreateCard onChange={handleFormChange} courses={courses} />
+        <MomEditCard
+          courses={courses as CourseDto[]}
+          mom={mom}
+          onChange={handleFormChange}
+        />
       </View>
       <TouchableOpacity onPress={addMom} style={styles.actionButton}>
         <Ionicons name="save" size={24} color="#720039" />
@@ -134,17 +155,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    left: 10, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    left: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   actionButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    right: 20, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    right: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
     marginTop: 30,

@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { CustomMom } from "../types/MomType";
+import { Mom as MomDto } from "../API";
 
-const MomCard = ({ mom }: { mom: CustomMom }) => {
+const MomCard = ({ mom }: { mom: MomDto }) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -21,12 +21,20 @@ const MomCard = ({ mom }: { mom: CustomMom }) => {
         )}
       </View>
       <View style={styles.row}>
-        {mom.registratedCourses.map((course, index) => {
-          if (course.icon && course.icon in MaterialIcons.glyphMap) {
+        {mom.courses?.items.map((registration, index) => {
+          if (
+            registration &&
+            registration.course &&
+            registration.course.icon &&
+            registration.course.icon in MaterialIcons.glyphMap
+          ) {
             return (
               <MaterialIcons
                 key={index}
-                name={course.icon as keyof typeof MaterialIcons.glyphMap}
+                name={
+                  registration.course
+                    .icon as keyof typeof MaterialIcons.glyphMap
+                }
                 size={22}
                 color="#666666"
               />
@@ -42,7 +50,9 @@ const MomCard = ({ mom }: { mom: CustomMom }) => {
           );
         })}
       </View>
-      <Text style={styles.info}>Teilnahmen: {mom.attendanceCount}</Text>
+      <Text style={styles.info}>
+        Teilnahmen: {mom.attendances?.items.length}
+      </Text>
     </View>
   );
 };

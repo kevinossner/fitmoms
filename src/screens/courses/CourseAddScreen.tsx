@@ -1,30 +1,48 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../../types/RootStackParamListType";
+import React, { useState, useCallback } from "react";
+import { StyleSheet, View, TouchableOpacity, Alert, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { Mom as MomDto } from "../../API";
+import { NewCourse } from "../../types/CourseType";
 import { generateClient } from "aws-amplify/api";
+import { listMoms } from "../../graphql/queries";
 import { createCourse, createRegistration } from "../../graphql/mutations";
-import CourseEditCreateCard from "../../components/CourseEditCreateCard";
-import { CourseFull } from "../../types/CourseType";
-import { Mom } from "../../API";
+import CourseEditCard from "../../components/CourseEditCard";
 
-type MomDetailsScreenRouteProp = RouteProp<RootStackParamList, "CourseAdd">;
 const client = generateClient();
-const initialCourse: CourseFull = {
-  name: "",
-  registratedMoms: [],
-};
 
 const CourseAddScreen = () => {
   const navigation = useNavigation();
-  const [course, setCourse] = useState<CourseFull>(initialCourse);
-  const route = useRoute<MomDetailsScreenRouteProp>();
-  const { moms: initialMoms } = route.params;
-  const [moms, setMoms] = useState<Mom[]>(initialMoms);
+  const [course, setCourse] = useState<NewCourse>({
+    name: "",
+    registratedMoms: [],
+  });
+  const [moms, setMoms] = useState<MomDto[]>([]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
+  const fetchData = async () => {
+    try {
+      const coursesQuery = await client.graphql({
+        query: listMoms,
+      });
+      const fetchedMoms = coursesQuery.data.listMoms.items as MomDto[];
+      fetchedMoms.sort((a, b) => {
+        if (a.lastName < b.lastName) return -1;
+        if (a.lastName > b.lastName) return 1;
+        if (a.firstName < b.firstName) return -1;
+        if (a.firstName > b.firstName) return 1;
+        return 0;
+      });
+      setMoms(fetchedMoms);
+    } catch (error) {
+      Alert.alert("Error", "Daten konnten nicht geladen werden.");
+    }
+  };
 
-  function handleFormChange(updatedCourse: CourseFull) {
+  function handleFormChange(updatedCourse: NewCourse) {
     setCourse((prevCourse) => {
       if (
         prevCourse.name === updatedCourse.name &&
@@ -42,7 +60,10 @@ const CourseAddScreen = () => {
 
   async function addCourse() {
     try {
-      if (course.name === "") return;
+      if (course.name === "") {
+        Alert.alert("Error", "Name ausfüllen.");
+        return;
+      }
 
       const response = await client.graphql({
         query: createCourse,
@@ -70,11 +91,10 @@ const CourseAddScreen = () => {
       );
 
       navigation.goBack();
-    } catch (err) {
-      console.log("error creating course:", err);
+    } catch (error) {
+      Alert.alert("Error", `${error}`);
     }
   }
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -84,7 +104,11 @@ const CourseAddScreen = () => {
         <Ionicons name="arrow-back" size={28} color="#720039" />
       </TouchableOpacity>
       <View style={styles.content}>
-        <CourseEditCreateCard onChange={handleFormChange} moms={moms} />
+        <CourseEditCard
+          course={course}
+          moms={moms}
+          onChange={handleFormChange}
+        />
       </View>
       <TouchableOpacity onPress={addCourse} style={styles.actionButton}>
         <Ionicons name="save" size={24} color="#720039" />
@@ -103,17 +127,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    left: 10, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    left: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   actionButton: {
     position: "absolute",
-    top: 0, // Adjust the position from the bottom
-    right: 20, // Adjust the position from the right
-    justifyContent: "center", // Center the icon inside the button
-    alignItems: "center", // Center the icon inside the button
+    top: 0,
+    right: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
     marginTop: 30,

@@ -18,7 +18,7 @@ import {
   createAttendance,
 } from "../../graphql/mutations";
 import { attendancesBySessionIDAndMomID } from "../../graphql/queries";
-import { CourseFull } from "../../types/CourseType";
+import { Course } from "../../types/CourseType";
 import { Mom, Session } from "../../API";
 import DetailsCard from "../../components/DetailsCard";
 import { CustomSession } from "../../types/SessionType";
@@ -36,7 +36,7 @@ const SessionDetailsScreen = () => {
   const { session: initialSession } = route.params;
   const { courses: initialCourses } = route.params;
   const [session, setSession] = useState<CustomSession>(initialSession);
-  const [courses, setCourses] = useState<CourseFull[]>(initialCourses);
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
   const [attendances, setAttendances] = useState<string[]>([]);
   const [visible, setVisible] = React.useState(false);
   const [editable, setEditable] = React.useState(false);

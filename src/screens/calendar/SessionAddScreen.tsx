@@ -7,7 +7,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { generateClient } from "aws-amplify/api";
 import { createSession } from "../../graphql/mutations";
 import SessionEditCreateCard from "../../components/SessionEditCreateCard";
-import { CourseFull } from "../../types/CourseType";
+import { Course } from "../../types/CourseType";
 
 type SessionAddScreenRouteProp = RouteProp<RootStackParamList, "SessionAdd">;
 const client = generateClient();
@@ -17,7 +17,7 @@ const SessionAddScreen = () => {
   const route = useRoute<SessionAddScreenRouteProp>();
   const { courses: initialCourses } = route.params;
   const { date: selectedDate } = route.params;
-  const [courses, setCourses] = useState<CourseFull[]>(initialCourses);
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
   const [selectedDateTime, setSelectedDateTime] = useState<Date>();
 

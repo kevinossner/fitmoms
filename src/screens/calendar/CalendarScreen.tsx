@@ -4,8 +4,8 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { CalendarList, DateData, LocaleConfig } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { generateClient } from "aws-amplify/api";
-import { Session, Course, Mom } from "../../API";
-import { CourseFull } from "../../types/CourseType";
+import { Session, Course as CourseDto, Mom } from "../../API";
+import { Course } from "../../types/CourseType";
 import { CustomSession } from "../../types/SessionType";
 import {
   listSessions,
@@ -78,7 +78,7 @@ const CalendarScreen = () => {
   const [sessionsOnDate, setSessionsOnDate] = useState<CustomSession[]>([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
-  const [courses, setCourses] = useState<CourseFull[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   function formatToEuropeanDate(dateTimeStr: string): string {
     const date = new Date(dateTimeStr);
@@ -118,7 +118,7 @@ const CalendarScreen = () => {
       const coursesQuery = await client.graphql({
         query: listCourses,
       });
-      const coursesData = coursesQuery.data.listCourses.items as Course[];
+      const coursesData = coursesQuery.data.listCourses.items as CourseDto[];
       const coursesFull = await Promise.all(
         coursesData.map(async (course) => {
           if (course.id) {
@@ -137,7 +137,7 @@ const CalendarScreen = () => {
               createdAt: course.createdAt,
               updatedAt: course.updatedAt,
               registratedMoms: registratedMoms,
-            } as CourseFull;
+            } as Course;
           }
           return {
             id: course.id,
@@ -146,7 +146,7 @@ const CalendarScreen = () => {
             createdAt: course.createdAt,
             updatedAt: course.updatedAt,
             registratedMoms: [],
-          } as CourseFull;
+          } as Course;
         })
       );
       setCourses(coursesFull);

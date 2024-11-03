@@ -19,14 +19,19 @@ import MomCard from "../../components/MomCard";
 const client = generateClient();
 
 const MomsOverviewScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [moms, setMoms] = useState<MomDto[]>([]);
+  const [filterOpenBills, setFilterOpenBills] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [])
+    }, [filterOpenBills])
   );
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [moms, setMoms] = useState<MomDto[]>([]);
+  const toggleFilter = () => {
+    setFilterOpenBills((prev) => !prev);
+  };
 
   const fetchData = async () => {
     try {
@@ -35,7 +40,7 @@ const MomsOverviewScreen = () => {
       });
 
       if ("data" in result) {
-        const fetchedMoms = result.data.listMoms.items as MomDto[];
+        let fetchedMoms = result.data.listMoms.items as MomDto[];
         fetchedMoms.sort((a, b) => {
           if (a.lastName < b.lastName) return -1;
           if (a.lastName > b.lastName) return 1;
@@ -44,6 +49,10 @@ const MomsOverviewScreen = () => {
 
           return 0;
         });
+        if (filterOpenBills) {
+          fetchedMoms = fetchedMoms.filter((mom) => mom.openBills);
+        }
+
         setMoms(fetchedMoms);
       }
     } catch (error) {
@@ -53,7 +62,12 @@ const MomsOverviewScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.counter}>{moms.length}</Text>
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={toggleFilter}>
+          <Ionicons name="filter-circle-outline" size={34} color="#720039" />
+        </TouchableOpacity>
+        <Text style={styles.counter}>{moms.length}</Text>
+      </View>
       <FlatList
         data={moms}
         renderItem={({ item: mom }) => (
@@ -81,10 +95,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     flex: 1,
   },
+  headerRow: {
+    flexDirection: "row", // Arrange children in a row
+    justifyContent: "space-between", // Spread items to opposite ends
+    alignItems: "center", // Center items vertically
+    paddingHorizontal: 10,
+    marginVertical: 0,
+  },
   counter: {
-    marginRight: 20,
     color: "#666666",
     textAlign: "right",
+    marginRight: 20,
   },
   addButton: {
     position: "absolute",
@@ -101,5 +122,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+  },
+  filterButton: {
+    padding: 10,
+    borderColor: "#720039",
+    borderWidth: 1,
+    borderRadius: 5,
+    alignItems: "center",
+    width: 150,
+  },
+  filterButtonText: {
+    color: "#720039",
   },
 });

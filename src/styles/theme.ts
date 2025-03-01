@@ -114,7 +114,7 @@ export const theme: MD3Theme = {
   fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#FF6B6B', // Energetic coral pink
+    primary: '#6A3DE8', //'#FF6B6B', // Energetic coral pink
     primaryContainer: '#FFE0E0',
     secondary: '#4ECDC4', // Fresh mint
     secondaryContainer: '#D4F5F2',

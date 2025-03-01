@@ -155,3 +155,123 @@ This app aims to streamline the process of managing and participating in sports 
 - is_important: boolean
 
 ## Project Structure
+
+```plaintext
+fitmoms/
+├── src/
+│   ├── app/                      # Expo Router app directory
+│   │   ├── (auth)/              # Authentication routes
+│   │   │   ├── sign-in.tsx
+│   │   │   ├── sign-up.tsx
+│   │   │   └── _layout.tsx
+│   │   ├── (app)/               # Protected app routes
+│   │   │   ├── (tabs)/         # Bottom tab navigation
+│   │   │   │   ├── feed/       # Feed tab routes
+│   │   │   │   ├── calendar/   # Calendar tab routes
+│   │   │   │   ├── courses/    # Courses tab routes
+│   │   │   │   ├── profile/    # Profile tab routes
+│   │   │   │   └── _layout.tsx # Tab navigation layout
+│   │   │   ├── course/         # Course details routes
+│   │   │   ├── session/        # Session details routes
+│   │   │   └── _layout.tsx     # Protected layout with auth check
+│   │   ├── (admin)/            # Admin-only routes
+│   │   │   ├── users/         # User management
+│   │   │   ├── sessions/      # Session management
+│   │   │   ├── courses/       # Course management
+│   │   │   └── _layout.tsx    # Admin layout with role check
+│   │   └── _layout.tsx         # Root layout
+│   ├── components/             # Reusable components
+│   │   ├── auth/              # Authentication components
+│   │   ├── courses/           # Course-related components
+│   │   ├── sessions/          # Session-related components
+│   │   ├── ui/               # UI components (buttons, cards, etc.)
+│   │   └── forms/            # Form components
+│   ├── hooks/                 # Custom React hooks
+│   │   ├── auth/             # Authentication hooks
+│   │   ├── courses/          # Course-related hooks
+│   │   ├── sessions/         # Session-related hooks
+│   │   └── api/              # API-related hooks
+│   ├── lib/                  # Library code and utilities
+│   │   ├── supabase.ts      # Supabase client
+│   │   ├── api.ts           # API functions
+│   │   └── utils/           # Utility functions
+│   ├── providers/           # React context providers
+│   │   ├── auth.tsx        # Authentication provider
+│   │   └── theme.tsx       # Theme provider
+│   ├── services/           # Business logic services
+│   │   ├── auth.ts        # Authentication service
+│   │   ├── courses.ts     # Course service
+│   │   └── sessions.ts    # Session service
+│   ├── styles/            # Global styles and theme
+│   │   ├── theme.ts      # Theme configuration
+│   │   └── global.ts     # Global styles
+│   └── types/             # TypeScript type definitions
+│       ├── database.ts   # Database types
+│       ├── api.ts       # API types
+│       └── navigation.ts # Navigation types
+├── assets/               # Static assets
+│   ├── images/         # Image assets
+│   ├── fonts/          # Font files
+│   └── icons/          # Icon assets
+├── docs/                # Documentation
+│   ├── CONTEXT.md      # Project context and requirements
+│   └── DEVELOPMENT_PLAN.md # Development plan
+└── tests/              # Test files
+    ├── unit/          # Unit tests
+    ├── integration/   # Integration tests
+    └── e2e/          # End-to-end tests
+```
+
+### Directory Structure Explanation
+
+- **src/app/**: Contains all the route components using Expo Router's file-based routing system
+
+  - **(auth)/**: Authentication-related routes (public)
+  - **(app)/**: Main application routes (protected)
+  - **(admin)/**: Admin-only routes (protected + role check)
+
+- **src/components/**: Reusable React components organized by feature
+
+  - **ui/**: Generic UI components
+  - **forms/**: Form-related components
+  - Feature-specific component directories
+
+- **src/hooks/**: Custom React hooks organized by feature
+
+  - **api/**: Data fetching hooks
+  - Feature-specific hook directories
+
+- **src/lib/**: Core functionality and utilities
+
+  - **supabase.ts**: Supabase client configuration
+  - **utils/**: Helper functions and utilities
+
+- **src/providers/**: React Context providers for global state management
+
+  - **auth.tsx**: Authentication state management
+  - **theme.tsx**: Theme state management
+
+- **src/services/**: Business logic layer
+
+  - Handles complex operations
+  - Interacts with the API
+  - Manages data transformations
+
+- **src/styles/**: Global styles and theme configuration
+
+  - **theme.ts**: Theme variables and configuration
+  - **global.ts**: Global style utilities
+
+- **src/types/**: TypeScript type definitions
+  - **database.ts**: Supabase database types
+  - **api.ts**: API request/response types
+  - **navigation.ts**: Navigation types
+
+### Key Features of the Structure
+
+1. **Feature-based Organization**: Components, hooks, and services are organized by feature for better scalability
+2. **Clear Separation of Concerns**: Each directory has a specific responsibility
+3. **Type Safety**: Comprehensive TypeScript types for database, API, and navigation
+4. **Scalable Routing**: Expo Router's file-based routing with nested layouts
+5. **Reusable Components**: UI components are separated from feature-specific components
+6. **Maintainable Testing**: Separate directories for different types of tests

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 10,
     paddingHorizontal: customTheme.spacing.m,
     paddingBottom: customTheme.spacing.m,
     backgroundColor: customTheme.colors.background,

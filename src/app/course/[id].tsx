@@ -1,27 +1,40 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { ActivityIndicator, Button, Card, Text } from 'react-native-paper';
 import { useCourseDetails } from '../../hooks/courses/useCourseDetails';
 import { useSubscribeToCourse } from '../../hooks/courses/useSubscribeToCourse';
+import { useIsSubscribed } from '../../hooks/courses/useIsSubscribed';
 import { ErrorMessage } from '../../components/ui/ErrorMessage';
+import { customTheme } from '../../styles/theme';
 
 export default function CourseDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { course, isLoading, error } = useCourseDetails(id as string);
   const { subscribe, isSubscribing, subscriptionError } = useSubscribeToCourse();
+  const { isSubscribed } = useIsSubscribed(id as string);
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
+      <>
+        <Stack.Screen options={{ title: 'Kursdetails' }} />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
+      </>
     );
   }
 
   if (error || !course) {
-    return <ErrorMessage message={error?.message || 'Course not found'} />;
+    return (
+      <>
+        <Stack.Screen options={{ title: 'Kursdetails' }} />
+        <View style={styles.container}>
+          <ErrorMessage message={error?.message || 'Course not found'} />
+        </View>
+      </>
+    );
   }
 
   const handleSubscribe = async () => {
@@ -34,57 +47,65 @@ export default function CourseDetailsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Card style={styles.card}>
-        <Card.Content>
-          <Text variant="headlineMedium">{course.name}</Text>
-          <Text variant="bodyLarge" style={styles.description}>
-            {course.description}
-          </Text>
-          <View style={styles.details}>
-            <Text variant="bodyMedium">Maximale Teilnehmerzahl: {course.max_participants}</Text>
-          </View>
-        </Card.Content>
-        <Card.Actions>
-          <Button
-            mode="contained"
-            onPress={handleSubscribe}
-            loading={isSubscribing}
-            disabled={isSubscribing}
-          >
-            Anmelden
-          </Button>
-        </Card.Actions>
-      </Card>
-      {subscriptionError && <Text style={styles.error}>{subscriptionError.message}</Text>}
-    </ScrollView>
+    <>
+      <Stack.Screen options={{ title: course.name }} />
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Card style={styles.card}>
+            <Card.Content>
+              <Text variant="headlineMedium">{course.name}</Text>
+              <Text variant="bodyLarge" style={styles.description}>
+                {course.description}
+              </Text>
+              <View style={styles.details}>
+                <Text variant="bodyMedium">Maximale Teilnehmerzahl: {course.max_participants}</Text>
+              </View>
+            </Card.Content>
+            <Card.Actions>
+              <Button
+                mode="contained"
+                onPress={handleSubscribe}
+                loading={isSubscribing}
+                disabled={isSubscribing || isSubscribed}
+              >
+                {isSubscribed ? 'Angemeldet' : 'Anmelden'}
+              </Button>
+            </Card.Actions>
+          </Card>
+          {subscriptionError && <Text style={styles.error}>{subscriptionError.message}</Text>}
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: customTheme.colors.background,
+  },
+  scrollContent: {
+    padding: customTheme.spacing.m,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: customTheme.colors.background,
   },
   card: {
-    margin: 16,
+    marginBottom: customTheme.spacing.m,
   },
   description: {
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: customTheme.spacing.m,
+    marginBottom: customTheme.spacing.m,
   },
   details: {
-    marginTop: 8,
+    marginTop: customTheme.spacing.s,
   },
   error: {
-    color: '#B00020',
+    color: customTheme.colors.error,
     textAlign: 'center',
-    marginTop: 8,
-    marginHorizontal: 16,
+    marginTop: customTheme.spacing.s,
   },
 });

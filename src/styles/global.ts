@@ -48,13 +48,14 @@ export const globalStyles = StyleSheet.create({
   // Cards
   card: {
     backgroundColor: customTheme.colors.surface,
-    borderRadius: customTheme.roundness * 4,
+    borderRadius: customTheme.roundness,
     padding: customTheme.spacing.m,
-    ...customTheme.shadows.small,
+    borderColor: customTheme.colors.outlineVariant,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   elevatedCard: {
     backgroundColor: customTheme.colors.surface,
-    borderRadius: customTheme.roundness * 4,
+    borderRadius: customTheme.roundness,
     padding: customTheme.spacing.m,
     ...customTheme.shadows.medium,
   },
@@ -66,7 +67,7 @@ export const globalStyles = StyleSheet.create({
     paddingVertical: customTheme.spacing.s,
     paddingHorizontal: customTheme.spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: customTheme.colors.outline,
+    borderBottomColor: customTheme.colors.outlineVariant,
   },
 
   // Forms

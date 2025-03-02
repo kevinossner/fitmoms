@@ -118,6 +118,38 @@ interface CustomTheme extends MD3Theme {
     xl: number;
     xxl: number;
   };
+  shadows: {
+    small: {
+      shadowColor: string;
+      shadowOffset: {
+        width: number;
+        height: number;
+      };
+      shadowOpacity: number;
+      shadowRadius: number;
+      elevation: number;
+    };
+    medium: {
+      shadowColor: string;
+      shadowOffset: {
+        width: number;
+        height: number;
+      };
+      shadowOpacity: number;
+      shadowRadius: number;
+      elevation: number;
+    };
+    large: {
+      shadowColor: string;
+      shadowOffset: {
+        width: number;
+        height: number;
+      };
+      shadowOpacity: number;
+      shadowRadius: number;
+      elevation: number;
+    };
+  };
 }
 
 export const customTheme: CustomTheme = {
@@ -162,6 +194,38 @@ export const customTheme: CustomTheme = {
     l: 24,
     xl: 32,
     xxl: 48,
+  },
+  shadows: {
+    small: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 3.84,
+      elevation: 3,
+    },
+    medium: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 5.46,
+      elevation: 5,
+    },
+    large: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 6,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 7.49,
+      elevation: 8,
+    },
   },
   roundness: 16,
 };

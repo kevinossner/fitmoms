@@ -1,6 +1,8 @@
 import { View, StyleSheet } from 'react-native';
-import { Card, Text, useTheme } from 'react-native-paper';
+import { Card, Text, useTheme, Avatar, IconButton } from 'react-native-paper';
 import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface AnnouncementCardProps {
   title: string;
@@ -18,29 +20,48 @@ export const AnnouncementCard = ({
   trainerName,
 }: AnnouncementCardProps) => {
   const theme = useTheme();
+  const initials = trainerName
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase();
 
   return (
     <Card
-      style={[
-        styles.card,
-        isImportant && { borderLeftColor: theme.colors.error, borderLeftWidth: 4 },
-      ]}
+      style={[styles.card, isImportant && { backgroundColor: theme.colors.primaryContainer }]}
       mode="outlined"
     >
-      <Card.Content>
+      <Card.Content style={styles.content}>
         <View style={styles.header}>
-          <Text variant="titleMedium" style={styles.title}>
-            {title}
-          </Text>
-          <Text variant="bodySmall" style={{ color: theme.colors.secondary }}>
-            {format(new Date(createdAt), 'MMM d, yyyy')}
-          </Text>
+          <View style={styles.trainerInfo}>
+            <Avatar.Text
+              size={36}
+              label={initials}
+              style={{
+                backgroundColor: isImportant ? theme.colors.primary : theme.colors.secondary,
+              }}
+            />
+            <View style={styles.headerText}>
+              <Text
+                variant="titleMedium"
+                style={[styles.title, isImportant && { color: theme.colors.onPrimaryContainer }]}
+              >
+                {title}
+              </Text>
+              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                {trainerName} • {format(new Date(createdAt), 'dd. MMMM', { locale: de })}
+              </Text>
+            </View>
+          </View>
+          {isImportant && (
+            <MaterialCommunityIcons name="alert-circle" size={24} color={theme.colors.primary} />
+          )}
         </View>
-        <Text variant="bodyMedium" style={styles.content}>
+        <Text
+          variant="bodyMedium"
+          style={[styles.contentText, isImportant && { color: theme.colors.onPrimaryContainer }]}
+        >
           {content}
-        </Text>
-        <Text variant="bodySmall" style={{ color: theme.colors.secondary }}>
-          Posted by {trainerName}
         </Text>
       </Card.Content>
     </Card>
@@ -52,17 +73,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 8,
   },
+  content: {
+    gap: 12,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  trainerInfo: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    flex: 1,
+  },
+  headerText: {
+    marginLeft: 12,
+    flex: 1,
   },
   title: {
-    flex: 1,
-    marginRight: 8,
+    fontWeight: '600',
   },
-  content: {
-    marginBottom: 12,
+  contentText: {
+    lineHeight: 20,
   },
 });

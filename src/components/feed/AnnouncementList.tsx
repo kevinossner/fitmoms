@@ -94,7 +94,14 @@ export const AnnouncementList = () => {
         />
       )}
       contentContainerStyle={styles.list}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={['#6200ee']} // Material Design primary color
+          tintColor="#6200ee"
+        />
+      }
       ListEmptyComponent={<Text style={styles.emptyText}>No announcements yet</Text>}
     />
   );

@@ -109,86 +109,59 @@ const fontConfig = {
   },
 };
 
-export const theme: MD3Theme = {
+interface CustomTheme extends MD3Theme {
+  spacing: {
+    xs: number;
+    s: number;
+    m: number;
+    l: number;
+    xl: number;
+    xxl: number;
+  };
+}
+
+export const customTheme: CustomTheme = {
   ...MD3LightTheme,
   fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#6A3DE8', //'#FF6B6B', // Energetic coral pink
-    primaryContainer: '#FFE0E0',
-    secondary: '#4ECDC4', // Fresh mint
-    secondaryContainer: '#D4F5F2',
-    tertiary: '#FFD93D', // Warm yellow
-    tertiaryContainer: '#FFF3D6',
+    primary: '#6A3DE8',
+    primaryContainer: '#EDE7FF',
+    onPrimaryContainer: '#21005E',
+    secondary: '#8B44FF',
+    secondaryContainer: '#F2E7FF',
+    onSecondaryContainer: '#22005D',
+    tertiary: '#7C5DA8',
+    tertiaryContainer: '#F3EAFF',
+    onTertiaryContainer: '#2B1649',
     surface: '#FFFFFF',
-    surfaceVariant: '#F5F5F5',
-    background: '#FFFFFF',
-    error: '#FF6B6B',
-    errorContainer: '#FFE0E0',
-    onPrimary: '#FFFFFF',
-    onPrimaryContainer: '#400000',
-    onSecondary: '#FFFFFF',
-    onSecondaryContainer: '#002E2B',
-    onTertiary: '#000000',
-    onTertiaryContainer: '#3F3000',
     onSurface: '#1C1B1F',
+    surfaceVariant: '#F3EFF4',
     onSurfaceVariant: '#49454E',
-    onError: '#FFFFFF',
-    onErrorContainer: '#400000',
     outline: '#79747E',
+    outlineVariant: '#CAC4CF',
+    error: '#BA1A1A',
+    errorContainer: '#FFDAD6',
+    onError: '#FFFFFF',
+    onErrorContainer: '#410002',
+    background: '#FDFBFF',
+    onBackground: '#1C1B1F',
     elevation: {
       level0: 'transparent',
-      level1: '#F8F8F8',
-      level2: '#F3F3F3',
-      level3: '#EEEEEE',
-      level4: '#E9E9E9',
-      level5: '#E4E4E4',
+      level1: '#F8F5FF',
+      level2: '#F3EEFF',
+      level3: '#EEE7FF',
+      level4: '#EDE6FF',
+      level5: '#EAE3FF',
     },
   },
-  roundness: 2,
-};
-
-// Custom theme additions
-export const customTheme = {
-  ...theme,
   spacing: {
     xs: 4,
     s: 8,
     m: 16,
     l: 24,
     xl: 32,
-    xxl: 40,
+    xxl: 48,
   },
-  shadows: {
-    small: {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.15,
-      shadowRadius: 3.84,
-      elevation: 3,
-    },
-    medium: {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 0.2,
-      shadowRadius: 5.46,
-      elevation: 5,
-    },
-    large: {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 6,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 7.49,
-      elevation: 8,
-    },
-  },
+  roundness: 16,
 };

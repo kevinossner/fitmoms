@@ -8,7 +8,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: theme.colors.onSurface,
         tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
       }}
     >
@@ -16,8 +16,12 @@ export default function TabLayout() {
         name="feed/index"
         options={{
           title: 'Feed',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" size={size} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'home' : 'home-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -25,8 +29,12 @@ export default function TabLayout() {
         name="calendar/index"
         options={{
           title: 'Calendar',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="calendar" size={size} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'calendar' : 'calendar-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -34,8 +42,12 @@ export default function TabLayout() {
         name="courses/index"
         options={{
           title: 'Courses',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="book-open-variant" size={size} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'book-open' : 'book-open-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -43,8 +55,12 @@ export default function TabLayout() {
         name="profile/index"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" size={size} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'account' : 'account-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />

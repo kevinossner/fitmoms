@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { Platform } from 'react-native';
 
 type User = Database['public']['Tables']['users']['Row'];
 
@@ -162,12 +164,73 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithApple = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'apple',
+      // Only proceed with Apple Sign In on iOS
+      if (Platform.OS !== 'ios') {
+        throw new Error('Apple Sign In is only available on iOS devices');
+      }
+
+      // Check if Apple Sign In is available on the device
+      let isAvailable = false;
+      try {
+        isAvailable = await AppleAuthentication.isAvailableAsync();
+      } catch (availabilityError) {
+        console.log('Error checking Apple Sign In availability:', availabilityError);
+        throw new Error('Unable to verify Apple Sign In availability');
+      }
+
+      if (!isAvailable) {
+        throw new Error(
+          'Apple Sign In is not available on this device. Please ensure you are signed into iCloud and have an Apple ID set up.'
+        );
+      }
+
+      // Request sign in with Apple
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
       });
 
-      return { error };
+      // Sign in with Supabase using the Apple ID token
+      const { data: authData, error: signInError } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: credential.identityToken!,
+      });
+
+      if (signInError) throw signInError;
+      if (!authData.user) throw new Error('No user data returned from sign in');
+
+      // Check if user profile already exists
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (!existingUser) {
+        // Create user profile if it doesn't exist
+        const { data: userData, error: profileError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            email: authData.user.email,
+            first_name: credential.fullName?.givenName || '',
+            last_name: credential.fullName?.familyName || '',
+          })
+          .select()
+          .single();
+
+        if (profileError) throw profileError;
+        setUser(userData);
+      } else {
+        setUser(existingUser);
+      }
+
+      setSession(authData.session);
+      return { error: null };
     } catch (error) {
+      console.error('Apple Sign In error:', error);
       return { error: error as Error };
     }
   };

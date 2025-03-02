@@ -16,13 +16,13 @@ export default function HomeScreen() {
     <View style={[globalStyles.container, globalStyles.centerContent]}>
       <View style={styles.content}>
         <Text variant="headlineMedium" style={styles.welcome}>
-          Welcome, {user?.first_name}!
+          Willkommen, {user?.first_name}!
         </Text>
         <Text variant="bodyLarge" style={styles.subtitle}>
-          You're successfully logged in.
+          Du bist erfolgreich eingeloggt.
         </Text>
         <Button mode="outlined" onPress={handleSignOut} style={styles.button}>
-          Sign Out
+          Abmelden
         </Button>
       </View>
     </View>

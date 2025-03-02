@@ -117,7 +117,8 @@ export default function SignInScreen() {
             <Button
               mode="outlined"
               onPress={handleGoogleSignIn}
-              disabled={loading}
+              // disabled={loading}
+              disabled={true}
               style={[styles.socialButton, styles.googleButton]}
               icon="google"
             >

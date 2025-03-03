@@ -13,9 +13,6 @@ export default function FeedScreen() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          headerStyle: {
-            backgroundColor: theme.colors.background,
-          },
           header: () => (
             <View style={styles.header}>
               <Text variant="headlineMedium" style={styles.greeting}>

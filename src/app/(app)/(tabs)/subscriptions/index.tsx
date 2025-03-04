@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, RefreshControl } from 'react-native';
+import { View, StyleSheet, RefreshControl, FlatList } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useSubscriptions } from '../../../../hooks/subscriptions/useSubscriptions';
 import { SubscriptionStats } from '../../../../components/subscriptions/SubscriptionStats';
 import { customTheme } from '../../../../styles/theme';
-import { FlashList } from '@shopify/flash-list';
 
 export default function SubscriptionsScreen() {
   const router = useRouter();
@@ -54,7 +53,7 @@ export default function SubscriptionsScreen() {
 
   return (
     <View style={styles.container}>
-      <FlashList
+      <FlatList
         data={subscriptions}
         renderItem={({ item }) => (
           <View style={styles.subscriptionContainer}>
@@ -93,7 +92,6 @@ export default function SubscriptionsScreen() {
             <SubscriptionStats subscriptionId={item.id} />
           </View>
         )}
-        estimatedItemSize={200}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
         refreshControl={

@@ -1,7 +1,6 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { AnnouncementList } from '../../../../components/feed/AnnouncementList';
-import { Stack } from 'expo-router';
 import { useAuth } from '../../../../providers/auth';
 import { customTheme } from '../../../../styles/theme';
 
@@ -10,21 +9,15 @@ export default function FeedScreen() {
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          header: () => (
-            <View style={styles.header}>
-              <Text variant="headlineMedium" style={styles.greeting}>
-                Willkommen zurück,
-              </Text>
-              <Text variant="headlineLarge" style={styles.name}>
-                {user?.first_name}!
-              </Text>
-            </View>
-          ),
-        }}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text variant="headlineMedium" style={styles.greeting}>
+          Willkommen zurück,
+        </Text>
+        <Text variant="headlineLarge" style={styles.name}>
+          {user?.first_name}!
+        </Text>
+      </View>
       <View style={styles.content}>
         <View style={styles.sectionHeader}>
           <Text variant="titleMedium" style={styles.sectionTitle}>
@@ -33,7 +26,7 @@ export default function FeedScreen() {
         </View>
         <AnnouncementList />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -43,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
   },
   header: {
-    paddingTop: 10,
+    paddingTop: customTheme.spacing.m,
     paddingHorizontal: customTheme.spacing.m,
     paddingBottom: customTheme.spacing.m,
     backgroundColor: customTheme.colors.background,

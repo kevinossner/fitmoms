@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { View, FlatList, StyleSheet, RefreshControl, SafeAreaView } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { useCourses } from '../../../../hooks/courses/useCourses';
@@ -28,18 +28,24 @@ export default function CoursesScreen() {
 
   if (isLoading && !refreshing) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
-    return <ErrorMessage message={error.message} />;
+    return (
+      <SafeAreaView style={styles.container}>
+        <ErrorMessage message={error.message} />
+      </SafeAreaView>
+    );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={courses}
         renderItem={({ item }) => (
@@ -56,7 +62,7 @@ export default function CoursesScreen() {
           />
         }
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

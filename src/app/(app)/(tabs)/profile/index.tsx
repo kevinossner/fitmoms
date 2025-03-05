@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { Stack } from 'expo-router';
 import { useAuth } from '../../../../providers/auth';
@@ -12,7 +12,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Stack.Screen
         options={{
           title: 'Profile',
@@ -27,7 +27,7 @@ export default function ProfileScreen() {
           Sign Out
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

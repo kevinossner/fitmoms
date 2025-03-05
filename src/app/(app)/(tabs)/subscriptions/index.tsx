@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, RefreshControl, FlatList } from 'react-native';
+import { View, StyleSheet, RefreshControl, FlatList, SafeAreaView } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useSubscriptions } from '../../../../hooks/subscriptions/useSubscriptions';
@@ -19,40 +19,46 @@ export default function SubscriptionsScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <Text>Lade Abonnements...</Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <Text>Lade Abonnements...</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.error}>Fehler beim Laden der Abonnements</Text>
-        <Button mode="contained" onPress={refetch} style={styles.button}>
-          Erneut versuchen
-        </Button>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <Text style={styles.error}>Fehler beim Laden der Abonnements</Text>
+          <Button mode="contained" onPress={refetch} style={styles.button}>
+            Erneut versuchen
+          </Button>
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (!subscriptions || subscriptions.length === 0) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.emptyText}>Du hast noch keine Kurse abonniert.</Text>
-        <Button
-          mode="contained"
-          onPress={() => router.push('/(app)/(tabs)/courses')}
-          style={styles.button}
-        >
-          Kurse durchsuchen
-        </Button>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <Text style={styles.emptyText}>Du hast noch keine Kurse abonniert.</Text>
+          <Button
+            mode="contained"
+            onPress={() => router.push('/(app)/(tabs)/courses')}
+            style={styles.button}
+          >
+            Kurse durchsuchen
+          </Button>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={subscriptions}
         renderItem={({ item }) => (
@@ -103,7 +109,7 @@ export default function SubscriptionsScreen() {
           />
         }
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

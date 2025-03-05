@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { Stack } from 'expo-router';
 import { Calendar } from 'react-native-calendars';
@@ -73,7 +73,7 @@ export default function CalendarScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Stack.Screen
           options={{
             title: 'Kalender',
@@ -90,13 +90,13 @@ export default function CalendarScreen() {
         <View style={styles.centered}>
           <ActivityIndicator size="large" color={customTheme.colors.primary} />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Stack.Screen
           options={{
             title: 'Kalender',
@@ -113,12 +113,12 @@ export default function CalendarScreen() {
         <View style={styles.centered}>
           <Text style={styles.error}>Fehler beim Laden der Termine</Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Stack.Screen
         options={{
           title: 'Kalender',
@@ -205,7 +205,7 @@ export default function CalendarScreen() {
         }}
         onUpdate={refetch}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

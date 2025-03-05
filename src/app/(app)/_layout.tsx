@@ -19,13 +19,7 @@ export default function AppLayout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: {
-          backgroundColor: customTheme.colors.background,
-        },
-        headerTintColor: customTheme.colors.onSurface,
-        contentStyle: {
-          backgroundColor: customTheme.colors.background,
-        },
+        headerShown: false,
       }}
     />
   );

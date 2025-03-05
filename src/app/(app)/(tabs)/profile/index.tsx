@@ -13,12 +13,6 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: 'Profile',
-          headerLargeTitle: true,
-        }}
-      />
       <View style={styles.content}>
         <Text variant="headlineMedium" style={styles.welcome}>
           Welcome, {user?.first_name}!

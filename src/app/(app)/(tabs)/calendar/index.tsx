@@ -74,19 +74,6 @@ export default function CalendarScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <Stack.Screen
-          options={{
-            title: 'Kalender',
-            headerLargeTitle: true,
-            headerLargeTitleStyle: {
-              fontFamily: 'System',
-            },
-            headerStyle: {
-              backgroundColor: customTheme.colors.background,
-            },
-            headerShadowVisible: false,
-          }}
-        />
         <View style={styles.centered}>
           <ActivityIndicator size="large" color={customTheme.colors.primary} />
         </View>

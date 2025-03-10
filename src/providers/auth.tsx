@@ -21,6 +21,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signInWithApple: () => Promise<{ error: Error | null }>;
+  refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -244,6 +245,89 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const refreshSession = async () => {
+    try {
+      console.log('[Auth] Starting session refresh...');
+      // First try to get the current session
+      const { data: currentData, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error('[Auth] Error getting current session:', sessionError);
+        await signOut();
+        return;
+      }
+
+      console.log('[Auth] Current session check:', {
+        hasSession: !!currentData.session,
+        userId: currentData.session?.user?.id,
+      });
+
+      if (!currentData.session) {
+        console.log('[Auth] No current session found, signing out...');
+        await signOut();
+        return;
+      }
+
+      // Try to refresh the session
+      console.log('[Auth] Attempting to refresh session token...');
+      const {
+        data: { session: newSession },
+        error,
+      } = await supabase.auth.refreshSession(currentData.session);
+
+      if (error) {
+        console.error('[Auth] Session refresh failed:', error);
+        await signOut();
+        return;
+      }
+
+      if (!newSession) {
+        console.error('[Auth] Session refresh returned no session');
+        await signOut();
+        return;
+      }
+
+      console.log('[Auth] Got new session:', {
+        userId: newSession.user?.id,
+        expiresAt: newSession.expires_at,
+      });
+
+      // Update the session state
+      setSession(newSession);
+
+      // Only fetch user if we have a valid session and user ID
+      if (newSession?.user?.id) {
+        try {
+          console.log('[Auth] Fetching user data...');
+          const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', newSession.user.id)
+            .single();
+
+          if (userError) {
+            console.error('[Auth] Error fetching user data:', userError);
+            return;
+          }
+
+          if (!userData) {
+            console.error('[Auth] No user data found');
+            return;
+          }
+
+          setUser(userData);
+          console.log('[Auth] User data updated successfully');
+        } catch (userError) {
+          console.error('[Auth] Error in user fetch:', userError);
+        }
+      }
+    } catch (error) {
+      console.error('[Auth] Unexpected error in session refresh:', error);
+      // If anything fails, sign out to ensure clean state
+      await signOut();
+    }
+  };
+
   const value = {
     session,
     user,
@@ -253,6 +337,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signOut,
     signInWithGoogle,
     signInWithApple,
+    refreshSession,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

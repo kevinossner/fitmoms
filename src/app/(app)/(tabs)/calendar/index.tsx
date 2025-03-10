@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { View, StyleSheet, SafeAreaView, RefreshControl, ScrollView } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
-import { Stack } from 'expo-router';
+import { Stack, useNavigation } from 'expo-router';
 import { Calendar } from 'react-native-calendars';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
@@ -28,10 +28,26 @@ type MarkedDates = {
 };
 
 export default function CalendarScreen() {
+  const navigation = useNavigation();
   const { sessions, isLoading, error, refetch } = useSubscribedSessions();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, refetch]);
 
   // Group sessions by date
   const sessionsByDate = useMemo(() => {
@@ -71,7 +87,7 @@ export default function CalendarScreen() {
     // If there are multiple sessions, they will be shown in the list below
   };
 
-  if (isLoading) {
+  if (isLoading && !refreshing) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
@@ -84,19 +100,6 @@ export default function CalendarScreen() {
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
-        <Stack.Screen
-          options={{
-            title: 'Kalender',
-            headerLargeTitle: true,
-            headerLargeTitleStyle: {
-              fontFamily: 'System',
-            },
-            headerStyle: {
-              backgroundColor: customTheme.colors.background,
-            },
-            headerShadowVisible: false,
-          }}
-        />
         <View style={styles.centered}>
           <Text style={styles.error}>Fehler beim Laden der Termine</Text>
         </View>
@@ -106,82 +109,88 @@ export default function CalendarScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: 'Kalender',
-          headerLargeTitle: true,
-          headerLargeTitleStyle: {
-            fontFamily: 'System',
-          },
-          headerStyle: {
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[customTheme.colors.primary]}
+            tintColor={customTheme.colors.primary}
+          />
+        }
+      >
+        <Calendar
+          style={styles.calendar}
+          theme={{
             backgroundColor: customTheme.colors.background,
-          },
-          headerShadowVisible: false,
-        }}
-      />
-      <Calendar
-        style={styles.calendar}
-        theme={{
-          backgroundColor: customTheme.colors.background,
-          calendarBackground: customTheme.colors.background,
-          textSectionTitleColor: customTheme.colors.onBackground,
-          selectedDayBackgroundColor: customTheme.colors.primaryContainer,
-          selectedDayTextColor: customTheme.colors.onPrimaryContainer,
-          todayTextColor: customTheme.colors.primary,
-          dayTextColor: customTheme.colors.onBackground,
-          textDisabledColor: customTheme.colors.outline,
-          dotColor: customTheme.colors.primary,
-          monthTextColor: customTheme.colors.onBackground,
-          textMonthFontSize: 16,
-          textDayFontSize: 14,
-          textDayHeaderFontSize: 14,
-        }}
-        markedDates={markedDates}
-        onDayPress={handleDateSelected}
-        firstDay={1} // Start week on Monday
-        enableSwipeMonths={true}
-        // German month names and weekday names
-        monthNames={[
-          'Januar',
-          'Februar',
-          'März',
-          'April',
-          'Mai',
-          'Juni',
-          'Juli',
-          'August',
-          'September',
-          'Oktober',
-          'November',
-          'Dezember',
-        ]}
-        dayNames={['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']}
-        dayNamesShort={['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']}
-      />
+            calendarBackground: customTheme.colors.background,
+            textSectionTitleColor: customTheme.colors.onBackground,
+            selectedDayBackgroundColor: customTheme.colors.primaryContainer,
+            selectedDayTextColor: customTheme.colors.onPrimaryContainer,
+            todayTextColor: customTheme.colors.primary,
+            dayTextColor: customTheme.colors.onBackground,
+            textDisabledColor: customTheme.colors.outline,
+            dotColor: customTheme.colors.primary,
+            monthTextColor: customTheme.colors.onBackground,
+            textMonthFontSize: 16,
+            textDayFontSize: 14,
+            textDayHeaderFontSize: 14,
+          }}
+          markedDates={markedDates}
+          onDayPress={handleDateSelected}
+          firstDay={1}
+          enableSwipeMonths={true}
+          monthNames={[
+            'Januar',
+            'Februar',
+            'März',
+            'April',
+            'Mai',
+            'Juni',
+            'Juli',
+            'August',
+            'September',
+            'Oktober',
+            'November',
+            'Dezember',
+          ]}
+          dayNames={[
+            'Sonntag',
+            'Montag',
+            'Dienstag',
+            'Mittwoch',
+            'Donnerstag',
+            'Freitag',
+            'Samstag',
+          ]}
+          dayNamesShort={['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']}
+        />
 
-      {selectedDate && sessionsByDate[selectedDate]?.length > 1 && (
-        <View style={styles.sessionsContainer}>
-          <Text variant="titleMedium" style={styles.sessionListTitle}>
-            Termine am {format(new Date(selectedDate), 'dd.MM.yyyy', { locale: de })}
-          </Text>
-          {sessionsByDate[selectedDate].map(session => (
-            <View
-              key={session.id}
-              style={styles.sessionItem}
-              onTouchEnd={() => {
-                setSelectedSession(session);
-                setModalVisible(true);
-              }}
-            >
-              <Text variant="titleSmall">{session.course.name}</Text>
-              <Text variant="bodyMedium">
-                {format(new Date(session.start_time), 'HH:mm')} -{' '}
-                {format(new Date(session.end_time), 'HH:mm')}
-              </Text>
-            </View>
-          ))}
-        </View>
-      )}
+        {selectedDate && sessionsByDate[selectedDate]?.length > 1 && (
+          <View style={styles.sessionsContainer}>
+            <Text variant="titleMedium" style={styles.sessionListTitle}>
+              Termine am {format(new Date(selectedDate), 'dd.MM.yyyy', { locale: de })}
+            </Text>
+            {sessionsByDate[selectedDate].map(session => (
+              <View
+                key={session.id}
+                style={styles.sessionItem}
+                onTouchEnd={() => {
+                  setSelectedSession(session);
+                  setModalVisible(true);
+                }}
+              >
+                <Text variant="titleSmall">{session.course.name}</Text>
+                <Text variant="bodyMedium">
+                  {format(new Date(session.start_time), 'HH:mm')} -{' '}
+                  {format(new Date(session.end_time), 'HH:mm')}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
 
       <SessionDetailsModal
         visible={modalVisible}
@@ -200,6 +209,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: customTheme.colors.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   centered: {
     flex: 1,

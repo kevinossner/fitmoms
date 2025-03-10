@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, SafeAreaView } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { useCourses } from '../../../../hooks/courses/useCourses';
 import { CourseCard } from '../../../../components/courses/CourseCard';
 import { ErrorMessage } from '../../../../components/ui/ErrorMessage';
+import { customTheme } from '../../../../styles/theme';
 
 export default function CoursesScreen() {
   const router = useRouter();
@@ -12,13 +13,13 @@ export default function CoursesScreen() {
   const { courses, isLoading, error, refetch } = useCourses();
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(async () => {
+  const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   }, [refetch]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refetch();
     });
@@ -56,9 +57,9 @@ export default function CoursesScreen() {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#6200ee']}
-            tintColor="#6200ee"
+            onRefresh={handleRefresh}
+            colors={[customTheme.colors.primary]}
+            tintColor={customTheme.colors.primary}
           />
         }
       />

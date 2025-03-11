@@ -31,11 +31,14 @@ export default function AppLayout() {
           title: 'Profil',
           presentation: 'modal',
           headerShown: true,
+          headerStyle: {
+            backgroundColor: customTheme.colors.background,
+          },
           headerRight: () => {
             const router = useRouter();
             return (
               <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
-                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fetig</Text>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fertig</Text>
               </TouchableOpacity>
             );
           },
@@ -47,11 +50,14 @@ export default function AppLayout() {
           title: 'Details',
           presentation: 'modal',
           headerShown: true,
+          headerStyle: {
+            backgroundColor: customTheme.colors.background,
+          },
           headerRight: () => {
             const router = useRouter();
             return (
               <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
-                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fetig</Text>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fertig</Text>
               </TouchableOpacity>
             );
           },

@@ -1,8 +1,7 @@
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { Stack } from 'expo-router';
-import { useAuth } from '../../../../providers/auth';
-import { customTheme } from '../../../../styles/theme';
+import { useAuth } from '../../../providers/auth';
+import { customTheme } from '../../../styles/theme';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();

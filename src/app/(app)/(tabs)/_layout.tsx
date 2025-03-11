@@ -1,6 +1,8 @@
 import { Tabs } from 'expo-router';
 import { useTheme } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 export default function TabLayout() {
   const theme = useTheme();
@@ -10,6 +12,12 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: theme.colors.onSurface,
         tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
+        headerRight: () => (
+          <TouchableOpacity onPress={() => router.push('/profile')} style={{ marginRight: 16 }}>
+            <Ionicons name="person-circle-outline" size={24} color={theme.colors.onSurface} />
+          </TouchableOpacity>
+        ),
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -19,7 +27,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
-          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -29,7 +36,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />
           ),
-          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -39,7 +45,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'barbell' : 'barbell-outline'} size={24} color={color} />
           ),
-          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -49,17 +54,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'bookmark' : 'bookmark-outline'} size={24} color={color} />
           ),
-          headerShown: false,
-        }}
-      />
-      <Tabs.Screen
-        name="profile/index"
-        options={{
-          title: 'Profil',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'person-sharp' : 'person-outline'} size={24} color={color} />
-          ),
-          headerShown: false,
         }}
       />
     </Tabs>

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { Redirect, Stack } from 'expo-router';
+import { Redirect, Stack, useRouter } from 'expo-router';
 import { useAuth } from '../../providers/auth';
 import { customTheme } from '../../styles/theme';
+import { TouchableOpacity, Text } from 'react-native';
 
 export default function AppLayout() {
   const { session, loading } = useAuth();
@@ -17,10 +18,29 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
+    <Stack>
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="profile/index"
+        options={{
+          title: 'Profil',
+          presentation: 'modal',
+          headerShown: true,
+          headerRight: () => {
+            const router = useRouter();
+            return (
+              <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Done</Text>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+    </Stack>
   );
 }

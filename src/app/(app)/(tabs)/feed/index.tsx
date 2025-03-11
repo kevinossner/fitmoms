@@ -3,6 +3,9 @@ import { Text, useTheme } from 'react-native-paper';
 import { AnnouncementList } from '../../../../components/feed/AnnouncementList';
 import { useAuth } from '../../../../providers/auth';
 import { customTheme } from '../../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 export default function FeedScreen() {
   const { user } = useAuth();
@@ -11,12 +14,12 @@ export default function FeedScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text variant="headlineMedium" style={styles.greeting}>
-          Willkommen zurück,
+        <Text variant="headlineMedium" style={styles.name}>
+          Hi {user?.first_name}!
         </Text>
-        <Text variant="headlineLarge" style={styles.name}>
-          {user?.first_name}!
-        </Text>
+        <TouchableOpacity onPress={() => router.push('/profile')}>
+          <Ionicons name="person-circle-outline" size={32} color={theme.colors.onSurfaceVariant} />
+        </TouchableOpacity>
       </View>
       <View style={styles.content}>
         <View style={styles.sectionHeader}>
@@ -40,6 +43,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: customTheme.spacing.m,
     paddingBottom: customTheme.spacing.m,
     backgroundColor: customTheme.colors.background,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   greeting: {
     color: customTheme.colors.onSurfaceVariant,

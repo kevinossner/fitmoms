@@ -132,6 +132,7 @@ export default function CalendarScreen() {
           textDisabledColor: customTheme.colors.outline,
           dotColor: customTheme.colors.primary,
           monthTextColor: customTheme.colors.onBackground,
+          arrowColor: customTheme.colors.primary,
           textMonthFontSize: 16,
           textDayFontSize: 14,
           textDayHeaderFontSize: 14,

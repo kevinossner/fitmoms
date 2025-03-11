@@ -35,7 +35,23 @@ export default function AppLayout() {
             const router = useRouter();
             return (
               <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
-                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Done</Text>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fetig</Text>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="course/[id]"
+        options={{
+          title: 'Details',
+          presentation: 'modal',
+          headerShown: true,
+          headerRight: () => {
+            const router = useRouter();
+            return (
+              <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fetig</Text>
               </TouchableOpacity>
             );
           },

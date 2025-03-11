@@ -12,11 +12,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: theme.colors.onSurface,
         tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
-        headerRight: () => (
-          <TouchableOpacity onPress={() => router.push('/profile')} style={{ marginRight: 16 }}>
-            <Ionicons name="person-circle-outline" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-        ),
         headerShown: false,
       }}
     >

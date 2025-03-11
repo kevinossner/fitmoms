@@ -2,7 +2,16 @@ import { useEffect } from 'react';
 import { Redirect, Stack, useRouter } from 'expo-router';
 import { useAuth } from '../../providers/auth';
 import { customTheme } from '../../styles/theme';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: customTheme.colors.background,
+    borderBottomWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+});
 
 export default function AppLayout() {
   const { session, loading } = useAuth();
@@ -31,9 +40,8 @@ export default function AppLayout() {
           title: 'Profil',
           presentation: 'modal',
           headerShown: true,
-          headerStyle: {
-            backgroundColor: customTheme.colors.background,
-          },
+          headerShadowVisible: false,
+          headerStyle: styles.headerStyle,
           headerRight: () => {
             const router = useRouter();
             return (
@@ -50,9 +58,8 @@ export default function AppLayout() {
           title: 'Details',
           presentation: 'modal',
           headerShown: true,
-          headerStyle: {
-            backgroundColor: customTheme.colors.background,
-          },
+          headerShadowVisible: false,
+          headerStyle: styles.headerStyle,
           headerRight: () => {
             const router = useRouter();
             return (

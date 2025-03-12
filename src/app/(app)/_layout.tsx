@@ -42,6 +42,7 @@ export default function AppLayout() {
           headerShown: true,
           headerShadowVisible: false,
           headerStyle: styles.headerStyle,
+          headerTintColor: customTheme.colors.onSurface,
           headerRight: () => {
             const router = useRouter();
             return (
@@ -60,6 +61,7 @@ export default function AppLayout() {
           headerShown: true,
           headerShadowVisible: false,
           headerStyle: styles.headerStyle,
+          headerTintColor: customTheme.colors.onSurface,
           headerRight: () => {
             const router = useRouter();
             return (

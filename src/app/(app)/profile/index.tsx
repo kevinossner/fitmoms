@@ -14,10 +14,10 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text variant="headlineMedium" style={styles.welcome}>
-          Welcome, {user?.first_name}!
+          Hi {user?.first_name}!
         </Text>
         <Button mode="outlined" onPress={handleSignOut} style={styles.button}>
-          Sign Out
+          Abmelden
         </Button>
       </View>
     </SafeAreaView>

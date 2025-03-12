@@ -10,7 +10,6 @@ import { useSubscribedSessions } from '../../../../hooks/sessions/useSubscribedS
 import { SessionCard } from '../../../../components/sessions/SessionCard';
 import { customTheme } from '../../../../styles/theme';
 import { Database } from '../../../../types/database.types';
-
 type Session = Database['public']['Tables']['sessions']['Row'] & {
   course: Database['public']['Tables']['courses']['Row'];
   attendance?: Database['public']['Tables']['session_attendances']['Row'];
@@ -128,19 +127,6 @@ export default function CalendarScreen() {
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
-        <Stack.Screen
-          options={{
-            title: 'Kalender',
-            headerLargeTitle: true,
-            headerLargeTitleStyle: {
-              fontFamily: 'System',
-            },
-            headerStyle: {
-              backgroundColor: customTheme.colors.background,
-            },
-            headerShadowVisible: false,
-          }}
-        />
         <View style={styles.centered}>
           <Text style={styles.error}>Fehler beim Laden der Termine</Text>
         </View>
@@ -150,19 +136,6 @@ export default function CalendarScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: 'Kalender',
-          headerLargeTitle: true,
-          headerLargeTitleStyle: {
-            fontFamily: 'System',
-          },
-          headerStyle: {
-            backgroundColor: customTheme.colors.background,
-          },
-          headerShadowVisible: false,
-        }}
-      />
       <View style={styles.calendarContainer}>
         <Calendar
           style={styles.calendar}
@@ -247,7 +220,6 @@ const styles = StyleSheet.create({
   },
   calendarContainer: {
     backgroundColor: customTheme.colors.background,
-    paddingBottom: customTheme.spacing.m,
   },
   calendar: {
     marginBottom: customTheme.spacing.m,

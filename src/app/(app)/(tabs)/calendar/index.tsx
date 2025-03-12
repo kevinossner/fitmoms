@@ -3,7 +3,7 @@ import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { Stack } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { useSubscribedSessions } from '../../../../hooks/sessions/useSubscribedSessions';
@@ -27,6 +27,42 @@ type MarkedDates = {
     selected?: boolean;
   };
 };
+
+// Set up German localization
+LocaleConfig.locales['de'] = {
+  monthNames: [
+    'Januar',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember',
+  ],
+  monthNamesShort: [
+    'Jan.',
+    'Feb.',
+    'März',
+    'Apr.',
+    'Mai',
+    'Juni',
+    'Juli',
+    'Aug.',
+    'Sept.',
+    'Okt.',
+    'Nov.',
+    'Dez.',
+  ],
+  dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+  dayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+  today: 'Heute',
+};
+LocaleConfig.defaultLocale = 'de';
 
 export default function CalendarScreen() {
   const { sessions, isLoading, error, refetch } = useSubscribedSessions();
@@ -150,6 +186,7 @@ export default function CalendarScreen() {
           onDayPress={handleDateSelected}
           firstDay={1}
           enableSwipeMonths={true}
+          monthFormat="MMMM yyyy"
           monthNames={[
             'Januar',
             'Februar',

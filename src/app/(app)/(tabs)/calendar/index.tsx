@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { Stack } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { Calendar } from 'react-native-calendars';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { useSubscribedSessions } from '../../../../hooks/sessions/useSubscribedSessions';
-import { SessionDetailsModal } from '../../../../components/sessions/SessionDetailsModal';
+import { SessionCard } from '../../../../components/sessions/SessionCard';
 import { customTheme } from '../../../../styles/theme';
 import { Database } from '../../../../types/database.types';
 
@@ -22,7 +23,7 @@ type SessionsByDate = {
 type MarkedDates = {
   [date: string]: {
     marked: boolean;
-    dotColor: string;
+    dotColor?: string;
     selected?: boolean;
   };
 };
@@ -30,8 +31,12 @@ type MarkedDates = {
 export default function CalendarScreen() {
   const { sessions, isLoading, error, refetch } = useSubscribedSessions();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSelectedDate(format(new Date(), 'yyyy-MM-dd'));
+    }, [])
+  );
 
   // Group sessions by date
   const sessionsByDate = useMemo(() => {
@@ -49,6 +54,8 @@ export default function CalendarScreen() {
   // Get marked dates for the calendar
   const markedDates = useMemo(() => {
     const dates: MarkedDates = {};
+
+    // Mark all dates with sessions
     Object.keys(sessionsByDate).forEach(date => {
       dates[date] = {
         marked: true,
@@ -56,19 +63,20 @@ export default function CalendarScreen() {
         selected: date === selectedDate,
       };
     });
+
+    // Always mark selected date, even if it has no sessions
+    if (selectedDate && !dates[selectedDate]) {
+      dates[selectedDate] = {
+        marked: false,
+        selected: true,
+      };
+    }
+
     return dates;
   }, [sessionsByDate, selectedDate]);
 
   const handleDateSelected = (date: { dateString: string }) => {
-    const formattedDate = date.dateString;
-    setSelectedDate(formattedDate);
-    const sessionsOnDate = sessionsByDate[formattedDate];
-    if (sessionsOnDate?.length === 1) {
-      // If there's only one session on this date, show it directly
-      setSelectedSession(sessionsOnDate[0]);
-      setModalVisible(true);
-    }
-    // If there are multiple sessions, they will be shown in the list below
+    setSelectedDate(date.dateString);
   };
 
   if (isLoading) {
@@ -119,80 +127,72 @@ export default function CalendarScreen() {
           headerShadowVisible: false,
         }}
       />
-      <Calendar
-        style={styles.calendar}
-        theme={{
-          backgroundColor: customTheme.colors.background,
-          calendarBackground: customTheme.colors.background,
-          textSectionTitleColor: customTheme.colors.onBackground,
-          selectedDayBackgroundColor: customTheme.colors.primaryContainer,
-          selectedDayTextColor: customTheme.colors.onPrimaryContainer,
-          todayTextColor: customTheme.colors.primary,
-          dayTextColor: customTheme.colors.onBackground,
-          textDisabledColor: customTheme.colors.outline,
-          dotColor: customTheme.colors.primary,
-          monthTextColor: customTheme.colors.onBackground,
-          arrowColor: customTheme.colors.primary,
-          textMonthFontSize: 16,
-          textDayFontSize: 14,
-          textDayHeaderFontSize: 14,
-        }}
-        markedDates={markedDates}
-        onDayPress={handleDateSelected}
-        firstDay={1} // Start week on Monday
-        enableSwipeMonths={true}
-        // German month names and weekday names
-        monthNames={[
-          'Januar',
-          'Februar',
-          'März',
-          'April',
-          'Mai',
-          'Juni',
-          'Juli',
-          'August',
-          'September',
-          'Oktober',
-          'November',
-          'Dezember',
-        ]}
-        dayNames={['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']}
-        dayNamesShort={['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']}
-      />
+      <View style={styles.calendarContainer}>
+        <Calendar
+          style={styles.calendar}
+          theme={{
+            backgroundColor: customTheme.colors.background,
+            calendarBackground: customTheme.colors.background,
+            textSectionTitleColor: customTheme.colors.onBackground,
+            selectedDayBackgroundColor: customTheme.colors.primaryContainer,
+            selectedDayTextColor: customTheme.colors.onPrimaryContainer,
+            todayTextColor: customTheme.colors.primary,
+            dayTextColor: customTheme.colors.onBackground,
+            textDisabledColor: customTheme.colors.outline,
+            dotColor: customTheme.colors.primary,
+            monthTextColor: customTheme.colors.onBackground,
+            arrowColor: customTheme.colors.primary,
+            textMonthFontSize: 16,
+            textDayFontSize: 14,
+            textDayHeaderFontSize: 14,
+          }}
+          markedDates={markedDates}
+          onDayPress={handleDateSelected}
+          firstDay={1}
+          enableSwipeMonths={true}
+          monthNames={[
+            'Januar',
+            'Februar',
+            'März',
+            'April',
+            'Mai',
+            'Juni',
+            'Juli',
+            'August',
+            'September',
+            'Oktober',
+            'November',
+            'Dezember',
+          ]}
+          dayNames={[
+            'Sonntag',
+            'Montag',
+            'Dienstag',
+            'Mittwoch',
+            'Donnerstag',
+            'Freitag',
+            'Samstag',
+          ]}
+          dayNamesShort={['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']}
+        />
+      </View>
 
-      {selectedDate && sessionsByDate[selectedDate]?.length > 1 && (
-        <View style={styles.sessionsContainer}>
-          <Text variant="titleMedium" style={styles.sessionListTitle}>
-            Termine am {format(new Date(selectedDate), 'dd.MM.yyyy', { locale: de })}
+      <ScrollView style={styles.sessionsContainer}>
+        {selectedDate && sessionsByDate[selectedDate]?.length > 0 ? (
+          <>
+            <Text variant="titleMedium" style={styles.sessionListTitle}>
+              Termine am {format(new Date(selectedDate), 'dd.MM.yyyy', { locale: de })}
+            </Text>
+            {sessionsByDate[selectedDate].map(session => (
+              <SessionCard key={session.id} session={session} onUpdate={refetch} />
+            ))}
+          </>
+        ) : selectedDate ? (
+          <Text variant="bodyMedium" style={styles.noSessions}>
+            Keine Termine an diesem Tag
           </Text>
-          {sessionsByDate[selectedDate].map(session => (
-            <View
-              key={session.id}
-              style={styles.sessionItem}
-              onTouchEnd={() => {
-                setSelectedSession(session);
-                setModalVisible(true);
-              }}
-            >
-              <Text variant="titleSmall">{session.course.name}</Text>
-              <Text variant="bodyMedium">
-                {format(new Date(session.start_time), 'HH:mm')} -{' '}
-                {format(new Date(session.end_time), 'HH:mm')}
-              </Text>
-            </View>
-          ))}
-        </View>
-      )}
-
-      <SessionDetailsModal
-        visible={modalVisible}
-        session={selectedSession}
-        onDismiss={() => {
-          setModalVisible(false);
-          setSelectedSession(null);
-        }}
-        onUpdate={refetch}
-      />
+        ) : null}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -208,6 +208,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: customTheme.spacing.m,
   },
+  calendarContainer: {
+    backgroundColor: customTheme.colors.background,
+    paddingBottom: customTheme.spacing.m,
+  },
   calendar: {
     marginBottom: customTheme.spacing.m,
   },
@@ -218,12 +222,9 @@ const styles = StyleSheet.create({
   sessionListTitle: {
     marginBottom: customTheme.spacing.m,
   },
-  sessionItem: {
-    padding: customTheme.spacing.m,
-    backgroundColor: customTheme.colors.surface,
-    borderRadius: 8,
-    marginBottom: customTheme.spacing.s,
-    elevation: 1,
+  noSessions: {
+    textAlign: 'center',
+    color: customTheme.colors.outline,
   },
   error: {
     color: customTheme.colors.error,

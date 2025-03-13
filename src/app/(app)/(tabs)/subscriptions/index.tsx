@@ -5,6 +5,7 @@ import { useRouter, useNavigation } from 'expo-router';
 import { useSubscriptions } from '../../../../hooks/subscriptions/useSubscriptions';
 import { SubscriptionStats } from '../../../../components/subscriptions/SubscriptionStats';
 import { customTheme } from '../../../../styles/theme';
+import { Header } from '../../../../components/ui/Header';
 
 export default function SubscriptionsScreen() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function SubscriptionsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
-          <Text>Lade Abonnements...</Text>
+          <Text>Lade Anmeldungen...</Text>
         </View>
       </SafeAreaView>
     );
@@ -40,7 +41,7 @@ export default function SubscriptionsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
-          <Text style={styles.error}>Fehler beim Laden der Abonnements</Text>
+          <Text style={styles.error}>Fehler beim Laden der Anmeldungen</Text>
           <Button mode="contained" onPress={refetch} style={styles.button}>
             Erneut versuchen
           </Button>
@@ -53,7 +54,7 @@ export default function SubscriptionsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
-          <Text style={styles.emptyText}>Du hast noch keine Kurse abonniert.</Text>
+          <Text style={styles.emptyText}>Du hast noch keine Anmeldungen.</Text>
           <Button
             mode="contained"
             onPress={() => router.push('/(app)/(tabs)/courses')}
@@ -68,6 +69,7 @@ export default function SubscriptionsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Anmeldungen" />
       <FlatList
         data={subscriptions}
         renderItem={({ item }) => (

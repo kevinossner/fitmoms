@@ -5,6 +5,7 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import { useCourses } from '../../../../hooks/courses/useCourses';
 import { CourseCard } from '../../../../components/courses/CourseCard';
 import { ErrorMessage } from '../../../../components/ui/ErrorMessage';
+import { Header } from '../../../../components/ui/Header';
 import { customTheme } from '../../../../styles/theme';
 
 export default function CoursesScreen() {
@@ -47,6 +48,7 @@ export default function CoursesScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Kurse" />
       <FlatList
         data={courses}
         renderItem={({ item }) => (
@@ -70,7 +72,7 @@ export default function CoursesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: customTheme.colors.background,
   },
   centered: {
     flex: 1,

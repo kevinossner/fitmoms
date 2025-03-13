@@ -109,7 +109,7 @@ export const AnnouncementList = () => {
 
 const styles = StyleSheet.create({
   list: {
-    paddingVertical: 16,
+    paddingBottom: 16,
   },
   loader: {
     marginTop: 20,

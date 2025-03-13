@@ -1,9 +1,17 @@
-import { useEffect, useCallback, useRef } from 'react';
-import { Redirect, Stack } from 'expo-router';
+import { useEffect } from 'react';
+import { Redirect, Stack, useRouter } from 'expo-router';
 import { useAuth } from '../../providers/auth';
 import { customTheme } from '../../styles/theme';
-import { AppState, AppStateStatus } from 'react-native';
-import { supabase } from '../../lib/supabase';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: customTheme.colors.background,
+    borderBottomWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+});
 
 export default function AppLayout() {
   const { session, loading, refreshSession } = useAuth();
@@ -102,10 +110,51 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
+    <Stack>
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="profile/index"
+        options={{
+          title: 'Profil',
+          presentation: 'modal',
+          headerShown: true,
+          headerShadowVisible: false,
+          headerStyle: styles.headerStyle,
+          headerTintColor: customTheme.colors.onSurface,
+          headerRight: () => {
+            const router = useRouter();
+            return (
+              <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fertig</Text>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="course/[id]"
+        options={{
+          title: 'Details',
+          presentation: 'modal',
+          headerShown: true,
+          headerShadowVisible: false,
+          headerStyle: styles.headerStyle,
+          headerTintColor: customTheme.colors.onSurface,
+          headerRight: () => {
+            const router = useRouter();
+            return (
+              <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+                <Text style={{ color: customTheme.colors.primary, fontSize: 18 }}>Fertig</Text>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+    </Stack>
   );
 }

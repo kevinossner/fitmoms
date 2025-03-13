@@ -3,7 +3,7 @@ import { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { Platform } from 'react-native';
+import { Platform, AppState } from 'react-native';
 
 type User = Database['public']['Tables']['users']['Row'];
 
@@ -31,28 +31,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Separate effect for initial session
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session?.user) {
-        fetchUser(session.user.id);
-      }
       setLoading(false);
     });
+  }, []);
 
-    // Listen for auth changes
+  // Effect to handle auth state changes
+  useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session?.user) {
-        // Only fetch user if we don't already have their data
-        const currentUser = user;
-        if (!currentUser || currentUser.id !== session.user.id) {
-          await fetchUser(session.user.id);
-        }
-      } else {
+      if (!session) {
         setUser(null);
       }
       setLoading(false);
@@ -60,6 +53,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       subscription.unsubscribe();
+    };
+  }, []);
+
+  // Separate effect to handle user data fetching
+  useEffect(() => {
+    if (session?.user) {
+      const currentUser = user;
+      if (!currentUser || currentUser.id !== session.user.id) {
+        fetchUser(session.user.id);
+      }
+    }
+  }, [session]);
+
+  // Auto refresh handling
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state === 'active') {
+        supabase.auth.startAutoRefresh();
+      } else {
+        supabase.auth.stopAutoRefresh();
+      }
+    });
+
+    return () => {
+      subscription.remove();
     };
   }, []);
 
@@ -73,7 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           await new Promise(resolve => setTimeout(resolve, delay));
           return fetchUser(userId, retries - 1, delay);
         }
-        // On final retry, only log if it's not the expected "no rows" error
         if (!error.message.includes('multiple (or no) rows')) {
           console.error('Error fetching user:', error.message);
         }

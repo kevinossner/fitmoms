@@ -21,7 +21,6 @@ export default function AppLayout() {
     return <Redirect href="/sign-in" />;
   }
 
-  // Don't render anything while checking authentication state
   if (loading) {
     return null;
   }

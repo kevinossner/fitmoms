@@ -64,7 +64,6 @@ LocaleConfig.locales['de'] = {
 LocaleConfig.defaultLocale = 'de';
 
 export default function CalendarScreen() {
-  const navigation = useNavigation();
   const { sessions, isLoading, error, refetch } = useSubscribedSessions();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -115,7 +114,7 @@ export default function CalendarScreen() {
     setSelectedDate(date.dateString);
   };
 
-  if (isLoading && !refreshing) {
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
@@ -212,9 +211,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: customTheme.colors.background,
-  },
-  scrollContent: {
-    flexGrow: 1,
   },
   centered: {
     flex: 1,

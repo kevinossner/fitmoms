@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, SafeAreaView } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { ActivityIndicator, Text } from 'react-native-paper';
@@ -14,13 +14,13 @@ export default function CoursesScreen() {
   const { courses, isLoading, error, refetch } = useCourses();
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const handleRefresh = useCallback(async () => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   }, [refetch]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refetch();
     });
@@ -59,9 +59,9 @@ export default function CoursesScreen() {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={handleRefresh}
-            colors={[customTheme.colors.primary]}
-            tintColor={customTheme.colors.primary}
+            onRefresh={onRefresh}
+            colors={['#6200ee']}
+            tintColor="#6200ee"
           />
         }
       />

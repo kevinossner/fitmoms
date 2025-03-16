@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, RefreshControl, FlatList, SafeAreaView } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
-import { useRouter, useNavigation } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useSubscriptions } from '../../../../hooks/subscriptions/useSubscriptions';
 import { SubscriptionStats } from '../../../../components/subscriptions/SubscriptionStats';
 import { customTheme } from '../../../../styles/theme';
@@ -9,25 +9,16 @@ import { Header } from '../../../../components/ui/Header';
 
 export default function SubscriptionsScreen() {
   const router = useRouter();
-  const navigation = useNavigation();
   const { subscriptions, isLoading, error, refetch } = useSubscriptions();
   const [refreshing, setRefreshing] = useState(false);
 
-  const handleRefresh = useCallback(async () => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   }, [refetch]);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      refetch();
-    });
-
-    return unsubscribe;
-  }, [navigation, refetch]);
-
-  if (isLoading && !refreshing) {
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
@@ -114,7 +105,7 @@ export default function SubscriptionsScreen() {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={handleRefresh}
+            onRefresh={onRefresh}
             colors={[customTheme.colors.primary]}
             tintColor={customTheme.colors.primary}
           />

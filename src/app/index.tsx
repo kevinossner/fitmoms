@@ -8,9 +8,9 @@ import { useEffect } from 'react';
 export default function Index() {
   const { session, loading } = useAuth();
 
-  useEffect(() => {
-    console.log('Root index - Session:', session?.user?.id, 'Loading:', loading);
-  }, [session, loading]);
+  // useEffect(() => {
+  //   console.log('Root index - Session:', session?.user?.id, 'Loading:', loading);
+  // }, [session, loading]);
 
   // Show loading indicator while checking auth state
   if (loading) {
